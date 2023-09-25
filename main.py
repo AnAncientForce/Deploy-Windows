@@ -5,7 +5,6 @@ import webbrowser
 import subprocess
 import os
 import json
-import ctypes
 
 
 with open('data.json', 'r') as file:
@@ -103,7 +102,7 @@ def log(v):
 
 
 
-button_labels = ["Install Apps", "Open addons", "CTT", "set_lockscreen_wallpaper", "Restart Explorer"]
+button_labels = ["Install Apps", "Open addons", "CTT", "Set Lockscreen Wallpaper", "Restart Explorer"]
 commands = [install_applications, lambda: open_urls(addons), ctt, set_lockscreen_wallpaper, restart_explorer]
 
 root = tk.Tk()
