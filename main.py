@@ -65,17 +65,19 @@ def ctt():
 
 
 def set_lockscreen_wallpaper():
-    wallpaper_path = os.path.join(os.getcwd(), 'wallpapers\\LockScreenWallpaper.jpg')
+    current_directory = os.getcwd()
+    wallpaper_path = os.path.join(current_directory, 'wallpapers', 'LockScreenWallpaper.jpg')
+    command = [
+        "powershell.exe",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-Command",
+        "Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI' -Name 'OEMBackgroundImage' -Value '{}'".format(wallpaper_path)
+    ]
     try:
-        key_name = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI"
-        value_name_image = "OEMBackgroundImage"
-        value_name_enable = "OEMBackground"
-
-        ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, value_name_image, 0, ctypes.windll.winreg.REG_SZ, wallpaper_path)
-        ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, value_name_enable, 0, ctypes.windll.winreg.REG_DWORD, 1)
-        
+        subprocess.run(command, check=True)
         print("Lock screen wallpaper has been set.")
-    except Exception as e:
+    except subprocess.CalledProcessError as e:
         print(f"Error: {e}")
 
     restart_explorer()
