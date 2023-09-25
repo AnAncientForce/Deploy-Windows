@@ -70,7 +70,7 @@ def set_lockscreen_wallpaper():
     wallpaper_path = os.path.join(wallpaper_directory, 'LockScreenWallpaper.jpg')
     SPI_SETDESKWALLPAPER = 20
     ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, wallpaper_path, 3)
-
+    restart_explorer()
 
 def install_applications():
     for package in packages:
