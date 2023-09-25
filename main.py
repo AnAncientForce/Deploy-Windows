@@ -1,7 +1,18 @@
 import tkinter as tk
 from tkinter import scrolledtext
+import time
+import webbrowser
 import subprocess
 import os
+
+addons = [
+        "https://librewolf.net/installation/windows/",
+        "https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/",
+        "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/",
+        "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/",
+        "https://addons.mozilla.org/en-US/firefox/addon/clearurls/",
+        "https://addons.mozilla.org/en-US/firefox/addon/duckduckgo-for-firefox/"
+    ]
 
 def on_focus_out(event):
     root.destroy()
@@ -21,6 +32,12 @@ def restart_explorer():
     except Exception as e:
         print(f"Error: {e}")
 
+
+def open_urls(urls):
+     for url in urls:
+        webbrowser.open(url, new=0)
+        log(f"> {url}\n")
+        time.sleep(0.3)
 
 
 def install_applications():
@@ -45,16 +62,10 @@ def install_applications():
     text_box.configure(state=tk.NORMAL)  # Allow editing the text box
     
     for package in packages:
-        print(f"> {package}")
-        text_box.insert(tk.END, f"> {package}\n")
-        text_box.see(tk.END)  # Auto-scroll to the end
-        text_box.update_idletasks()
+        log(f"> {package}\n")
         
     for package in packages:
-        print(f"Installing {package}...")
-        text_box.insert(tk.END, f"Installing {package}...\n")
-        text_box.see(tk.END)  # Auto-scroll to the end
-        text_box.update_idletasks()
+        log(f"Installing {package}...\n")
         
         try:
             result = subprocess.run(["winget", "install", package], capture_output=True, text=True)
@@ -69,14 +80,16 @@ def install_applications():
             error_msg = f"An error occurred while installing {package}: {e}"
             print(error_msg)
             text_box.insert(tk.END, error_msg + "\n")
-    
-    print("All packages have been upgraded / installed")
-    text_box.insert(tk.END, "All packages have been upgraded / installed\n")
-    
-    text_box.configure(state=tk.DISABLED)  # Disable editing the text box
+    log("All packages have been upgraded / installed\n")
 
 
-
+def log(v):
+    print(v)
+    text_box.configure(state=tk.NORMAL)  # Allow editing the text box
+    text_box.insert(tk.END, v)
+    text_box.see(tk.END)  # Auto-scroll to the end
+    text_box.update_idletasks()
+    text_box.configure(state=tk.DISABLED)
 
 
 
@@ -86,9 +99,11 @@ root.configure(bg="#6495ED")
 root.geometry("400x400")
 
 x_1 = tk.Button(root, text="Install Apps", command=install_applications)
+x_2 = tk.Button(root, text="Open addons", command=lambda: open_urls(addons))
 x_4 = tk.Button(root, text="Restart Explorer", command=restart_explorer)
 
 x_1.pack(pady=10, fill=tk.X)
+x_2.pack(pady=10, fill=tk.X)
 x_4.pack(pady=10, fill=tk.X)
 
 text_box = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=30, width=40, state=tk.DISABLED)
