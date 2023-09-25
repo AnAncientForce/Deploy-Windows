@@ -4,41 +4,15 @@ import time
 import webbrowser
 import subprocess
 import os
+import json
 
-addons = [
-    "https://librewolf.net/installation/windows/",
-    "https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/",
-    "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/",
-    "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/",
-    "https://addons.mozilla.org/en-US/firefox/addon/clearurls/",
-    "https://addons.mozilla.org/en-US/firefox/addon/duckduckgo-for-firefox/"
-]
-exes = [
-    "https://librewolf.net/installation/windows/",
-    "https://obsidian.md/download"
-]
-utils = [
-    "https://github.com/ChrisTitusTech/winutil"
-]
-packages = [
-    "Safing.Portmaster",
-    "rocksdanister.LivelyWallpaper",
-    "ArduinoSA.IDE.stable",
-    "ProtonTechnologies.ProtonVPN",
-    "Microsoft.VisualStudioCode",
-    "Obsidian.Obsidian",
-    "LibreWolf.LibreWolf",
-    "Oracle.VirtualBox",
-    "Microsoft.PowerToys",
-    "Microsoft.WindowsTerminal",
-    "eloston.ungoogled-chromium",
-    "WinDirStat.WinDirStat",
-    "Audacity.Audacity",
-    "VideoLAN.VLC",
-    "BlenderFoundation.Blender",
-    "GIMP.GIMP",
-    "OpenJS.NodeJS"
-    ]
+
+with open('data.json', 'r') as file:
+    data = json.load(file)
+addons = data['addons']
+exes = data['exes']
+utils = data['utils']
+packages = data['packages']
 '''
 DolphinEmulator.Dolphin
 '''
@@ -82,7 +56,6 @@ def ctt():
     "-ArgumentList",
     "'irm https://christitus.com/win | iex'"
     ]
-
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
