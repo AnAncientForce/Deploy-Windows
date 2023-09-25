@@ -21,6 +21,7 @@ utils = [
     "https://github.com/ChrisTitusTech/winutil"
 ]
 packages = [
+    "Safing.Portmaster",
     "rocksdanister.LivelyWallpaper",
     "ArduinoSA.IDE.stable",
     "ProtonTechnologies.ProtonVPN",
@@ -31,6 +32,11 @@ packages = [
     "Microsoft.PowerToys",
     "Microsoft.WindowsTerminal",
     "eloston.ungoogled-chromium",
+    "WinDirStat.WinDirStat",
+    "Audacity.Audacity",
+    "VideoLAN.VLC",
+    "BlenderFoundation.Blender",
+    "GIMP.GIMP",
     "OpenJS.NodeJS"
     ]
 '''
