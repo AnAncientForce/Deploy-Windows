@@ -21,6 +21,7 @@
         "https://nodejs.org/en/download",
         "https://www.dev47apps.com/droidcam/windows/",
         "https://ungoogled-software.github.io/ungoogled-chromium-binaries/releases/windows/64bit/",
+        "https://github.com/yt-dlp/yt-dlp/releases",
         "https://github.com/cemu-project/Cemu/releases",
         "https://github.com/BtbN/FFmpeg-Builds/releases",
         "https://github.com/ShareX/ShareX/releases",
@@ -31,10 +32,20 @@
         "https://github.com/audacity/audacity/releases",
         "https://github.com/notepad-plus-plus/notepad-plus-plus/releases"
     ],
+    "portable_exes": [
+        "https://ryujinx.org/",
+        "https://dolphin-emu.org/",
+        "https://crystalmark.info/en/download/",
+        "https://ungoogled-software.github.io/ungoogled-chromium-binaries/releases/windows/64bit/",
+        "https://github.com/yt-dlp/yt-dlp/releases",
+        "https://github.com/cemu-project/Cemu/releases",
+        "https://github.com/BtbN/FFmpeg-Builds/releases"
+    ],
     "utils": [
         "https://github.com/ChrisTitusTech/winutil"
     ],
     "packages": [
+        "yt-dlp.yt-dlp",
         "Open-Shell.Open-Shell-Menu",
         "Safing.Portmaster",
         "rocksdanister.LivelyWallpaper",
