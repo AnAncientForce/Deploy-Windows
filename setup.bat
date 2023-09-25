@@ -1,5 +1,10 @@
 @echo off
 setlocal
+
+rem Update pip
+python -m pip install --upgrade pip
+
+rem Install requirements
 pip install -r requirements.txt
 
 rem Get the directory of the batch script
