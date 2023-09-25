@@ -135,5 +135,5 @@ text_box = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=30, width=40, st
 text_box.pack(pady=10, padx=10)
 
 center(root)
-root.bind("<FocusOut>", on_focus_out)
+# root.bind("<FocusOut>", on_focus_out)
 root.mainloop()
