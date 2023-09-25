@@ -65,8 +65,22 @@ def ctt():
 
 
 def set_lockscreen_wallpaper():
-    ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\OEMBackgroundImage", 0, ctypes.windll.winreg.REG_SZ, os.path.join(os.getcwd(), "wallpapers\\LockScreenWallpaper.jpg")); ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\OEMBackground", 0, ctypes.windll.winreg.REG_DWORD, 1)
+    wallpaper_path = os.path.join(os.getcwd(), 'wallpapers\\LockScreenWallpaper.jpg')
+    try:
+        key_name = "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI"
+        value_name_image = "OEMBackgroundImage"
+        value_name_enable = "OEMBackground"
+
+        ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, value_name_image, 0, ctypes.windll.winreg.REG_SZ, wallpaper_path)
+        ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, value_name_enable, 0, ctypes.windll.winreg.REG_DWORD, 1)
+        
+        print("Lock screen wallpaper has been set.")
+    except Exception as e:
+        print(f"Error: {e}")
+
     restart_explorer()
+
+
 
 def install_applications():
     for package in packages:
