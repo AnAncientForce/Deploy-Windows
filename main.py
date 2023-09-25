@@ -5,6 +5,7 @@ import webbrowser
 import subprocess
 import os
 import json
+import ctypes
 
 
 with open('data.json', 'r') as file:
@@ -63,6 +64,14 @@ def ctt():
         print(f"Error: {e}")
 
 
+def set_lockscreen_wallpaper():
+    current_directory = os.getcwd()
+    wallpaper_directory = os.path.join(current_directory, 'wallpapers')
+    wallpaper_path = os.path.join(wallpaper_directory, 'LockScreenWallpaper.jpg')
+    SPI_SETDESKWALLPAPER = 20
+    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, wallpaper_path, 3)
+
+
 def install_applications():
     for package in packages:
         log(f"> {package}\n")
@@ -96,8 +105,8 @@ def log(v):
 
 
 
-button_labels = ["Install Apps", "Open addons", "CTT", "Restart Explorer"]
-commands = [install_applications, lambda: open_urls(addons), ctt, restart_explorer]
+button_labels = ["Install Apps", "Open addons", "CTT", "set_lockscreen_wallpaper", "Restart Explorer"]
+commands = [install_applications, lambda: open_urls(addons), ctt, set_lockscreen_wallpaper, restart_explorer]
 
 root = tk.Tk()
 root.title("Installer")
