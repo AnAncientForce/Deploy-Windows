@@ -65,21 +65,8 @@ def ctt():
 
 
 def set_lockscreen_wallpaper():
-    current_directory = os.getcwd()
     wallpaper_path = os.path.join(current_directory, 'wallpapers', 'LockScreenWallpaper.jpg')
-    command = [
-        "powershell.exe",
-        "-ExecutionPolicy",
-        "Bypass",
-        "-Command",
-        "Set-ItemProperty -Path 'HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI' -Name 'OEMBackgroundImage' -Value '{}'".format(wallpaper_path)
-    ]
-    try:
-        subprocess.run(command, check=True)
-        print("Lock screen wallpaper has been set.")
-    except subprocess.CalledProcessError as e:
-        print(f"Error: {e}")
-
+    os.system(f'igcmdWin10.exe setlockimage {wallpaper_path}')
     restart_explorer()
 
 
