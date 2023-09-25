@@ -15,6 +15,7 @@ utils = data['utils']
 packages = data['packages']
 '''
 DolphinEmulator.Dolphin
+Cemu.Cemu
 '''
 
 

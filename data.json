@@ -9,8 +9,26 @@
     ],
     "exes": [
         "https://librewolf.net/installation/windows/",
-        "https://obsidian.md/download",
-        "https://github.com/BtbN/FFmpeg-Builds/releases"
+        "https://ryujinx.org/",
+        "https://dolphin-emu.org/",
+        "https://yuzu-emu.org/",
+        "https://code.visualstudio.com/",
+        "https://www.virtualbox.org/wiki/Downloads",
+        "https://windirstat.net/download.html",
+        "https://www.videolan.org/vlc/",
+        "https://www.gimp.org/downloads/",
+        "https://crystalmark.info/en/download/",
+        "https://nodejs.org/en/download",
+        "https://ungoogled-software.github.io/ungoogled-chromium-binaries/releases/windows/64bit/",
+        "https://github.com/cemu-project/Cemu/releases",
+        "https://github.com/BtbN/FFmpeg-Builds/releases",
+        "https://github.com/ShareX/ShareX/releases",
+        "https://github.com/obsidianmd/obsidian-releases/releases",
+        "https://github.com/ProtonVPN/win-app/releases",
+        "https://github.com/rocksdanister/lively/releases",
+        "https://github.com/microsoft/PowerToys/releases",
+        "https://github.com/audacity/audacity/releases",
+        "https://github.com/notepad-plus-plus/notepad-plus-plus/releases"
     ],
     "utils": [
         "https://github.com/ChrisTitusTech/winutil"
@@ -35,6 +53,7 @@
         "GIMP.GIMP",
         "ShareX.ShareX",
         "Notepad++.Notepad++",
+        "CrystalDewWorld.CrystalDiskInfo",
         "OpenJS.NodeJS"
     ]
 }
