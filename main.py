@@ -65,11 +65,7 @@ def ctt():
 
 
 def set_lockscreen_wallpaper():
-    current_directory = os.getcwd()
-    wallpaper_directory = os.path.join(current_directory, 'wallpapers')
-    wallpaper_path = os.path.join(wallpaper_directory, 'LockScreenWallpaper.jpg')
-    SPI_SETDESKWALLPAPER = 20
-    ctypes.windll.user32.SystemParametersInfoW(SPI_SETDESKWALLPAPER, 0, wallpaper_path, 3)
+    ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\OEMBackgroundImage", 0, ctypes.windll.winreg.REG_SZ, os.path.join(os.getcwd(), "wallpapers\\LockScreenWallpaper.jpg")); ctypes.windll.winreg.SetValueEx(ctypes.windll.winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Authentication\\LogonUI\\OEMBackground", 0, ctypes.windll.winreg.REG_DWORD, 1)
     restart_explorer()
 
 def install_applications():
