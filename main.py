@@ -6,13 +6,20 @@ import subprocess
 import os
 
 addons = [
-        "https://librewolf.net/installation/windows/",
-        "https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/",
-        "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/",
-        "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/",
-        "https://addons.mozilla.org/en-US/firefox/addon/clearurls/",
-        "https://addons.mozilla.org/en-US/firefox/addon/duckduckgo-for-firefox/"
-    ]
+    "https://librewolf.net/installation/windows/",
+    "https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/",
+    "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/",
+    "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/",
+    "https://addons.mozilla.org/en-US/firefox/addon/clearurls/",
+    "https://addons.mozilla.org/en-US/firefox/addon/duckduckgo-for-firefox/"
+]
+exes = [
+    "https://librewolf.net/installation/windows/",
+    "https://obsidian.md/download"
+]
+utils = [
+    "https://github.com/ChrisTitusTech/winutil"
+]
 
 def on_focus_out(event):
     root.destroy()
@@ -38,6 +45,25 @@ def open_urls(urls):
         webbrowser.open(url, new=0)
         log(f"> {url}\n")
         time.sleep(0.3)
+
+def ctt():
+    command = [
+    "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "-ExecutionPolicy",
+    "Bypass",
+    "-Command",
+    "Start-Process",
+    "powershell.exe",
+    "-Verb",
+    "RunAs",
+    "-ArgumentList",
+    "'irm https://christitus.com/win | iex'"
+    ]
+
+    try:
+        subprocess.run(command, check=True)
+    except subprocess.CalledProcessError as e:
+        print(f"Error: {e}")
 
 
 def install_applications():
@@ -93,18 +119,20 @@ def log(v):
 
 
 
+button_labels = ["Install Apps", "Open addons", "CTT", "Restart Explorer"]
+commands = [install_applications, lambda: open_urls(addons), ctt, restart_explorer]
+
 root = tk.Tk()
 root.title("Installer")
 root.configure(bg="#6495ED")
 root.geometry("400x400")
 
-x_1 = tk.Button(root, text="Install Apps", command=install_applications)
-x_2 = tk.Button(root, text="Open addons", command=lambda: open_urls(addons))
-x_4 = tk.Button(root, text="Restart Explorer", command=restart_explorer)
+buttons_frame = tk.Frame(root, bg="#6495ED")
+buttons_frame.pack(pady=10, fill=tk.X)
 
-x_1.pack(pady=10, fill=tk.X)
-x_2.pack(pady=10, fill=tk.X)
-x_4.pack(pady=10, fill=tk.X)
+for label, command in zip(button_labels, commands):
+    button = tk.Button(buttons_frame, text=label, command=command)
+    button.pack(pady=10, fill=tk.X)
 
 text_box = scrolledtext.ScrolledText(root, wrap=tk.WORD, height=30, width=40, state=tk.DISABLED)
 text_box.pack(pady=10, padx=10)
