@@ -153,7 +153,7 @@ def yt_playlist():
     user_input = entry.get()
     entry.delete(0, tk.END)
     log("Downloading playlist...")
-    download_command = f'yt-dlp -f "bestvideo[ext=mp4]" --output "C:/Users/{current_user}/Downloads/%(playlist_title)s/%(title)s.%(ext)s" "{user_input}"'
+    download_command = f'C:/Users/{current_user}/AppData/Local/Microsoft/WinGet/Packages/yt-dlp.yt-dlp_Microsoft.Winget.Source_8wekyb3d8bbwe/yt-dlp -f "bestvideo[ext=mp4]" --output "C:/Users/{current_user}/Downloads/%(playlist_title)s/%(title)s.%(ext)s" "{user_input}"'
     try:
         user_directory = f"C:/Users/{current_user}"
         os.chdir(user_directory)
