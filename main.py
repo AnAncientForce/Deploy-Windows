@@ -65,10 +65,8 @@ def ctt():
 
 
 def set_lockscreen_wallpaper():
-    current_directory = os.getcwd()
-    wallpaper_path = os.path.join(current_directory, 'wallpapers', 'LockScreenWallpaper.jpg')
+    wallpaper_path = os.path.join(os.getcwd(), 'wallpapers', 'LockScreenWallpaper.jpg')
     os.system(f'igcmdWin10.exe setlockimage {wallpaper_path}')
-    restart_explorer()
 
 
 
