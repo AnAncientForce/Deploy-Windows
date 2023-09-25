@@ -9,4 +9,3 @@ goto :EOF
 
 :UACPrompt
 powershell.exe -Command "Start-Process -FilePath '%0' -ArgumentList '%~dp0main.py' -Verb RunAs"
-exit /B
