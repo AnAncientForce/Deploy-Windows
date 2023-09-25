@@ -9,12 +9,14 @@
     ],
     "exes": [
         "https://librewolf.net/installation/windows/",
-        "https://obsidian.md/download"
+        "https://obsidian.md/download",
+        "https://github.com/BtbN/FFmpeg-Builds/releases"
     ],
     "utils": [
         "https://github.com/ChrisTitusTech/winutil"
     ],
     "packages": [
+        "Open-Shell.Open-Shell-Menu",
         "Safing.Portmaster",
         "rocksdanister.LivelyWallpaper",
         "ArduinoSA.IDE.stable",
