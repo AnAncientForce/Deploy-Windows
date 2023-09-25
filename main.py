@@ -20,6 +20,23 @@ exes = [
 utils = [
     "https://github.com/ChrisTitusTech/winutil"
 ]
+packages = [
+    "rocksdanister.LivelyWallpaper",
+    "ArduinoSA.IDE.stable",
+    "ProtonTechnologies.ProtonVPN",
+    "Microsoft.VisualStudioCode",
+    "Obsidian.Obsidian",
+    "LibreWolf.LibreWolf",
+    "Oracle.VirtualBox",
+    "Microsoft.PowerToys",
+    "Microsoft.WindowsTerminal",
+    "eloston.ungoogled-chromium",
+    "OpenJS.NodeJS"
+    ]
+'''
+DolphinEmulator.Dolphin
+'''
+
 
 def on_focus_out(event):
     root.destroy()
@@ -67,26 +84,6 @@ def ctt():
 
 
 def install_applications():
-    packages = [
-    "rocksdanister.LivelyWallpaper",
-    "ArduinoSA.IDE.stable",
-    "ProtonTechnologies.ProtonVPN",
-    "Microsoft.VisualStudioCode",
-    "Obsidian.Obsidian",
-    "LibreWolf.LibreWolf",
-    "Oracle.VirtualBox",
-    "Microsoft.PowerToys",
-    "Microsoft.WindowsTerminal",
-    "eloston.ungoogled-chromium",
-    "OpenJS.NodeJS"
-    ]
-
-    '''
-    DolphinEmulator.Dolphin
-    '''
-    
-    text_box.configure(state=tk.NORMAL)  # Allow editing the text box
-    
     for package in packages:
         log(f"> {package}\n")
         
