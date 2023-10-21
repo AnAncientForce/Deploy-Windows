@@ -7,6 +7,9 @@ packages/
 Properties/
 Resources/
 .gitignore
+.gitignore
+hibiscusflower_102842.ico
+Form1.Designer.cs
 bin/release
 AfreshLock.csproj
 AfreshLock.sln
