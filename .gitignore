@@ -1,3 +1,30 @@
-*
-!.gitignore
-!\Deploy Windows\bin\Debug\*
+.git/
+.vs/
+bin/Debug/.vs/
+bin/release
+obj/
+packages/
+Properties/
+Resources/
+.gitignore
+AfreshLock.csproj
+AfreshLock.sln
+App.config
+app.manifest
+Form1.cs
+Form1.Designers
+Form1.resx
+Form2.cs
+Form2.Designer.cs
+Form2.resx
+FormUtils.cs
+Helper.cs
+hibiscusflower 102842.ico
+Main.cs
+Main.Designer.cs
+Main.resx
+packages.config
+Program.cs
+Settings.cs
+Settings.Designer.cs
+Settings.resx
