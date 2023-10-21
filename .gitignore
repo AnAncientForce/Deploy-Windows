@@ -7,12 +7,13 @@ packages/
 Properties/
 Resources/
 .gitignore
+bin/release
 AfreshLock.csproj
 AfreshLock.sln
 App.config
 app.manifest
 Form1.cs
-Form1.Designers
+Form1.Designer.cs
 Form1.resx
 Form2.cs
 Form2.Designer.cs
