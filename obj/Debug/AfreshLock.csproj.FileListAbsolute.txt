@@ -1,0 +1,55 @@
+C:\Users\Z\source\repos\AfreshLock\bin\Debug\AfreshLock.exe.config
+C:\Users\Z\source\repos\AfreshLock\bin\Debug\AfreshLock.exe
+C:\Users\Z\source\repos\AfreshLock\bin\Debug\AfreshLock.pdb
+C:\Users\Z\source\repos\AfreshLock\bin\Debug\GlobalHotKey.dll
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.AssemblyReference.cache
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.SuggestedBindingRedirects.cache
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.Form1.resources
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.Form2.resources
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.Properties.Resources.resources
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.GenerateResource.cache
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.CoreCompileInputs.cache
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.CopyComplete
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.exe
+C:\Users\Z\source\repos\AfreshLock\obj\Debug\AfreshLock.pdb
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\AfreshLock.exe
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\GlobalHotKey.dll
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\YamlDotNet.dll
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\YamlDotNet.xml
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.AssemblyReference.cache
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.SuggestedBindingRedirects.cache
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.Form1.resources
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.Form2.resources
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.Properties.Resources.resources
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.GenerateResource.cache
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.CoreCompileInputs.cache
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.csproj.CopyComplete
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.Main.resources
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\AfreshLock.Settings.resources
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\Deploy Windows.exe.config
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\Deploy Windows.exe
+C:\Users\Y\source\repos\AfreshLock\bin\Debug\Deploy Windows.pdb
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\Deploy Windows.exe
+C:\Users\Y\source\repos\AfreshLock\obj\Debug\Deploy Windows.pdb
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\Deploy Windows.exe.config
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\Deploy Windows.exe
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\Deploy Windows.pdb
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\GlobalHotKey.dll
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\YamlDotNet.dll
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Y\source\repos\Deploy Windows\bin\Debug\YamlDotNet.xml
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.csproj.AssemblyReference.cache
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.csproj.SuggestedBindingRedirects.cache
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.Form1.resources
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.Form2.resources
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.Main.resources
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.Properties.Resources.resources
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.Settings.resources
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.csproj.GenerateResource.cache
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.csproj.CoreCompileInputs.cache
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\AfreshLock.csproj.CopyComplete
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\Deploy Windows.exe
+C:\Users\Y\source\repos\Deploy Windows\obj\Debug\Deploy Windows.pdb

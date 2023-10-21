@@ -1,0 +1,71 @@
+{
+    "addons": [
+        "https://librewolf.net/installation/windows/",
+        "https://addons.mozilla.org/en-US/firefox/addon/canvasblocker/",
+        "https://addons.mozilla.org/en-US/firefox/addon/ublock-origin/",
+        "https://addons.mozilla.org/en-US/firefox/addon/bitwarden-password-manager/",
+        "https://addons.mozilla.org/en-US/firefox/addon/clearurls/",
+        "https://addons.mozilla.org/en-US/firefox/addon/duckduckgo-for-firefox/"
+    ],
+    "exes": [
+        "https://librewolf.net/installation/windows/",
+        "https://ryujinx.org/",
+        "https://dolphin-emu.org/",
+        "https://yuzu-emu.org/",
+        "https://code.visualstudio.com/",
+        "https://www.virtualbox.org/wiki/Downloads",
+        "https://windirstat.net/download.html",
+        "https://www.videolan.org/vlc/",
+        "https://www.gimp.org/downloads/",
+        "https://crystalmark.info/en/download/",
+        "https://nodejs.org/en/download",
+        "https://www.dev47apps.com/droidcam/windows/",
+        "https://ungoogled-software.github.io/ungoogled-chromium-binaries/releases/windows/64bit/",
+        "https://github.com/yt-dlp/yt-dlp/releases",
+        "https://github.com/cemu-project/Cemu/releases",
+        "https://github.com/BtbN/FFmpeg-Builds/releases",
+        "https://github.com/ShareX/ShareX/releases",
+        "https://github.com/obsidianmd/obsidian-releases/releases",
+        "https://github.com/ProtonVPN/win-app/releases",
+        "https://github.com/rocksdanister/lively/releases",
+        "https://github.com/microsoft/PowerToys/releases",
+        "https://github.com/audacity/audacity/releases",
+        "https://github.com/notepad-plus-plus/notepad-plus-plus/releases"
+    ],
+    "portable_exes": [
+        "https://ryujinx.org/",
+        "https://dolphin-emu.org/",
+        "https://crystalmark.info/en/download/",
+        "https://ungoogled-software.github.io/ungoogled-chromium-binaries/releases/windows/64bit/",
+        "https://github.com/yt-dlp/yt-dlp/releases",
+        "https://github.com/cemu-project/Cemu/releases",
+        "https://github.com/BtbN/FFmpeg-Builds/releases"
+    ],
+    "utils": [
+        "https://github.com/ChrisTitusTech/winutil"
+    ],
+    "packages": [
+        "yt-dlp.yt-dlp",
+        "Open-Shell.Open-Shell-Menu",
+        "Safing.Portmaster",
+        "rocksdanister.LivelyWallpaper",
+        "ArduinoSA.IDE.stable",
+        "ProtonTechnologies.ProtonVPN",
+        "Microsoft.VisualStudioCode",
+        "Obsidian.Obsidian",
+        "LibreWolf.LibreWolf",
+        "Oracle.VirtualBox",
+        "Microsoft.PowerToys",
+        "Microsoft.WindowsTerminal",
+        "eloston.ungoogled-chromium",
+        "WinDirStat.WinDirStat",
+        "Audacity.Audacity",
+        "VideoLAN.VLC",
+        "BlenderFoundation.Blender",
+        "GIMP.GIMP",
+        "ShareX.ShareX",
+        "Notepad++.Notepad++",
+        "CrystalDewWorld.CrystalDiskInfo",
+        "OpenJS.NodeJS"
+    ]
+}
