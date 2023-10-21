@@ -1,7 +1,5 @@
-# Ignore everything by default
 *
-
-# Unignore the bin/Debug directory and its contents
 !bin/
 !bin/Debug/
 !bin/Debug/**
+bin/Debug/.vs/
