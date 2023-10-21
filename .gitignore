@@ -1,34 +1,7 @@
-.git/
-.vs/
-bin/Debug/.vs/
-bin/release
-obj/
-packages/
-Properties/
-Resources/
-.gitignore
-.gitignore
-hibiscusflower_102842.ico
-Form1.Designer.cs
-bin/release
-AfreshLock.csproj
-AfreshLock.sln
-App.config
-app.manifest
-Form1.cs
-Form1.Designer.cs
-Form1.resx
-Form2.cs
-Form2.Designer.cs
-Form2.resx
-FormUtils.cs
-Helper.cs
-hibiscusflower 102842.ico
-Main.cs
-Main.Designer.cs
-Main.resx
-packages.config
-Program.cs
-Settings.cs
-Settings.Designer.cs
-Settings.resx
+# Ignore everything by default
+*
+
+# Unignore the bin/Debug directory and its contents
+!bin/
+!bin/Debug/
+!bin/Debug/**
