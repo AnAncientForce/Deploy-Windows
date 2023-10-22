@@ -1,0 +1,22 @@
+{
+  "name": "sysz_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main/node.js",
+  "scripts": {
+    "start": "electron .",
+    "splash": "electron splash/node.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^25.4.0"
+  },
+  "build": {
+    "productName": "sysz",
+    "linux": {
+      "target": "AppImage"
+    }
+  }
+}
