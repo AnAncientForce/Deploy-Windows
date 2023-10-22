@@ -65,14 +65,14 @@ body {
   float: left 0;
   height: 100vh;
   width: 10vw;
-  background-color: purple;
+  background-color: rgb(9, 175, 175);
 }
 
 #section-content {
   float:right 0;
   height: 100vh;
   width: 90vw;
-  background-color: red;
+  background-color: darkcyan;
 }
 
 
@@ -170,15 +170,9 @@ textarea {
 }
 
 .perm-btn {
-  /* Set rounded corners */
-  border-radius: 15px;
-
-  /* Apply gradient background with slow animation */
   background: linear-gradient(45deg, #82b8ff, #b6e1ff);
   background-size: 300% 300%;
   animation: gradientAnimation 10s infinite;
-
-  /* Other button styles for appearance and interaction */
   color: white;
   font-size: 16px;
   font-weight: bold;
@@ -193,17 +187,13 @@ textarea {
   white-space: nowrap;
   transition: transform 0.3s;
   margin: 5%;
-  padding: 10px; /* Add padding to the button */
-  width: auto; /* Let the content determine the width */
-  height: auto; /* Let the content determine the height */
+  padding: 10px;
+  width: 100%; 
+  height: auto;
   user-select: none;
-  /* Define a custom animation keyframes */
-
-  /* Apply the animation on the button */
-  animation: dropInAnimation 0.5s ease-out; /* Adjust duration and timing function as needed */
-
+  animation: dropInAnimation 0.5s ease-out;
   line-height: 1.2;
-  max-height: 20vh; /* Adjust the height of each item as needed */
+  max-height: 20vh;
 }
 
 #section-settings {

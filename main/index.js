@@ -1,5 +1,6 @@
 // sysZ
 const { ipcRenderer } = require("electron");
+const { shell } = require("electron");
 const { exec } = require("child_process");
 const { spawn } = require("child_process");
 const fs = require("fs");
@@ -11,6 +12,12 @@ const { group } = require("console");
 
 var actionIndexer = 0;
 var booleanStorage = {};
+
+var addons;
+var exes;
+var utils;
+var packages;
+var portable_exes;
 
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
@@ -190,6 +197,41 @@ function page_home() {
       imgAlt: "Help",
     }
   );
+  createAction(
+    "Install Packages",
+    "square-button",
+    "section-home-btns",
+    function () {
+      cmd_res_exp();
+    },
+    {
+      showTitle: true,
+      useImg: true,
+      imgSrc: "../images/update.png",
+      imgAlt: "Help",
+    }
+  );
+  createAction(
+    "Open Addon URLs",
+    "square-button",
+    "section-home-btns",
+    function () {
+      cmd_open_urls();
+    },
+    {
+      showTitle: true,
+      useImg: true,
+      imgSrc: "../images/update.png",
+      imgAlt: "Help",
+    }
+  );
+}
+
+function cmd_open_urls() {
+  addons.forEach((url) => {
+    console.log(`> ${url}`);
+    shell.openExternal(url);
+  });
 }
 
 function cmd_set_lock_bg() {
@@ -247,8 +289,40 @@ function cmd_res_exp() {
   });
 }
 
+function cmd_winget() {
+  for (const package of packages) {
+    console.log(`Installing ${package}...`);
+    exec(`winget install ${package}`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Failed to install ${package}. Error: ${error.message}`);
+      } else {
+        if (stdout) {
+          console.log(`${package} has been successfully installed.`);
+        } else {
+          console.error(`Failed to install ${package}. Error: ${stderr}`);
+        }
+      }
+    });
+  }
+  console.log("All packages have been upgraded / installed");
+}
+
+function loadJson() {
+  const rawData = fs.readFileSync("data.json", "utf8");
+  const data = JSON.parse(rawData);
+  addons = data.addons;
+  exes = data.exes;
+  utils = data.utils;
+  packages = data.packages;
+  portable_exes = data.portable_exes;
+}
+
 function init_left_nav() {
   createAction("Operations", "perm-btn", "left-nav", function () {
+    // changeSection("section-home");
+    page_home();
+  });
+  createAction("Settings", "perm-btn", "left-nav", function () {
     // changeSection("section-home");
     page_home();
   });
@@ -256,5 +330,6 @@ function init_left_nav() {
 
 document.addEventListener("DOMContentLoaded", () => {
   init_left_nav();
+  loadJson();
   page_home();
 });
