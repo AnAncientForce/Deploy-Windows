@@ -247,6 +247,14 @@ function cmd_res_exp() {
   });
 }
 
+function init_left_nav() {
+  createAction("Operations", "perm-btn", "left-nav", function () {
+    // changeSection("section-home");
+    page_home();
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
+  init_left_nav();
   page_home();
 });
