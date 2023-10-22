@@ -202,7 +202,7 @@ function page_home() {
     "square-button",
     "section-home-btns",
     function () {
-      cmd_winget()''
+      cmd_winget();
     },
     {
       showTitle: true,
