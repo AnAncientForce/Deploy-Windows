@@ -19,6 +19,8 @@ var utils;
 var packages;
 var portable_exes;
 
+var current_selected_menu_item;
+
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
 }
@@ -48,6 +50,19 @@ function createAction(text, optionalClass, section, action, caArgs) {
 
   if (caArgs?.showTitle) {
     div.appendChild(document.createTextNode(text));
+  }
+
+  if (caArgs?.highlight) {
+    div.addEventListener("click", function () {
+      current_selected_menu_item = div;
+      current_selected_menu_item.style.background = "purple";
+      // reset others
+      document.querySelectorAll(".perm-btn").forEach((element) => {
+        if (element != current_selected_menu_item) {
+          element.style.background = "linear-gradient(45deg, #82b8ff, #b6e1ff)";
+        }
+      });
+    });
   }
 
   if (caArgs?.group) {
@@ -82,25 +97,6 @@ function createAction(text, optionalClass, section, action, caArgs) {
   // console.log("Appended", `action${actionIndexer}`, text);
   caArgs = {};
   return div;
-}
-
-function handleKeydown(event) {
-  switch (event.key) {
-    case "r":
-      window.location.reload();
-      window.scrollToDefault();
-      break;
-  }
-}
-
-function collapseLogic(x) {
-  if (checkBoolean(x) == false) {
-    saveBoolean(x, true);
-    toggleDiv(x, true);
-  } else if (checkBoolean(x) == true) {
-    saveBoolean(x, false);
-    toggleDiv(x, false);
-  }
 }
 
 var currentSection = "";
@@ -207,7 +203,7 @@ function page_home() {
     {
       showTitle: true,
       useImg: true,
-      imgSrc: "../images/update.png",
+      imgSrc: "../images/install.png",
       imgAlt: "Help",
     }
   );
@@ -221,7 +217,7 @@ function page_home() {
     {
       showTitle: true,
       useImg: true,
-      imgSrc: "../images/update.png",
+      imgSrc: "../images/firefox.png",
       imgAlt: "Help",
     }
   );
@@ -324,14 +320,30 @@ function loadJson() {
 }
 
 function init_left_nav() {
-  createAction("Operations", "perm-btn", "left-nav", function () {
-    // changeSection("section-home");
-    page_home();
-  });
-  createAction("Settings", "perm-btn", "left-nav", function () {
-    // changeSection("section-home");
-    page_home();
-  });
+  createAction(
+    "Operations",
+    "perm-btn",
+    "left-nav",
+    function () {
+      // changeSection("section-home")
+      page_home();
+    },
+    {
+      highlight: true,
+    }
+  );
+  createAction(
+    "Settings",
+    "perm-btn",
+    "left-nav",
+    function () {
+      // changeSection("section-home");
+      page_home();
+    },
+    {
+      highlight: true,
+    }
+  );
 }
 
 document.addEventListener("DOMContentLoaded", () => {
