@@ -193,9 +193,12 @@ function page_home() {
 }
 
 function cmd_set_lock_bg() {
-  const wallpaperPath = join(__dirname, "images", "LockScreenWallpaper.jpg");
   exec(
-    `igcmdWin10.exe setlockimage "${wallpaperPath}"`,
+    `igcmdWin10.exe setlockimage "${path.join(
+      __dirname,
+      "images",
+      "LockScreenWallpaper.jpg"
+    )}"`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error: ${error}`);
@@ -221,10 +224,8 @@ function cmd_god_mode() {
 }
 
 function cmd_ctt() {
-  const cmd =
-    'Start-Process powershell.exe -Verb RunAs -ArgumentList "irm https://christitus.com/win | iex"';
   exec(
-    `powershell -ExecutionPolicy Bypass -Command "${cmd}"`,
+    `C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error: ${error}`);
