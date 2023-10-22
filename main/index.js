@@ -292,17 +292,23 @@ function cmd_res_exp() {
 function cmd_winget() {
   for (const package of packages) {
     console.log(`Installing ${package}...`);
-    exec(`winget install ${package}`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Failed to install ${package}. Error: ${error.message}`);
-      } else {
-        if (stdout) {
-          console.log(`${package} has been successfully installed.`);
+    exec(
+      `winget install ${package}`,
+      { shell: true },
+      (error, stdout, stderr) => {
+        if (error) {
+          console.error(
+            `Failed to install ${package}. Error: ${error.message}`
+          );
         } else {
-          console.error(`Failed to install ${package}. Error: ${stderr}`);
+          if (stdout) {
+            console.log(`${package} has been successfully installed.`);
+          } else {
+            console.error(`Failed to install ${package}. Error: ${stderr}`);
+          }
         }
       }
-    });
+    );
   }
   console.log("All packages have been upgraded / installed");
 }
