@@ -17,8 +17,8 @@ var packages;
 var portable_exes;
 
 var current_selected_menu_item;
-var powershell =
-  "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+var powershell;
+var checkboxContainer;
 
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
@@ -170,7 +170,21 @@ function page_home() {
     {
       showTitle: true,
       useImg: true,
-      imgSrc: "../images/autostart.png",
+      imgSrc: "../images/terminal.png",
+      imgAlt: "Help",
+    }
+  );
+  createAction(
+    "Activate Windows",
+    "square-button",
+    "section-home-btns",
+    function () {
+      cmd_activate_windows();
+    },
+    {
+      showTitle: true,
+      useImg: true,
+      imgSrc: "../images/terminal.png",
       imgAlt: "Help",
     }
   );
@@ -198,7 +212,7 @@ function page_home() {
     {
       showTitle: true,
       useImg: true,
-      imgSrc: "../images/control.png",
+      imgSrc: "../images/terminal.png",
       imgAlt: "Help",
     }
   );
@@ -271,41 +285,52 @@ function cmd_set_lock_bg() {
 }
 
 function cmd_god_mode() {
-  exec(
-    "explorer.exe shell:::{ED7BA470-8E54-465E-825C-99712043E01C}",
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-        return;
-      }
-      log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
-    }
-  );
+  caArgs = {
+    command: `explorer.exe shell:::{ED7BA470-8E54-465E-825C-99712043E01C}`,
+  };
+  quick_exec(caArgs);
 }
 
-function cmd_ctt() {
-  exec(
-    `${powershell} -ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
-    (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-      }
-      log(`stdout: ${stdout}`);
-      console.error(`stderr: ${stderr}`);
-    }
-  );
-}
-
-function cmd_res_exp() {
-  const cmd = "Stop-Process -Name explorer -Force; Start-Process explorer";
-  exec(`powershell -Command "${cmd}"`, (error, stdout, stderr) => {
+function quick_exec(caArgs) {
+  powershell = "";
+  if (!caArgs?.command) {
+    log("No command given.");
+    return;
+  }
+  if (caArgs?.powershell) {
+    powershell =
+      "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
+  }
+  exec(`${powershell} ${caArgs.command}`, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error: ${error}`);
     }
     log(`stdout: ${stdout}`);
     console.error(`stderr: ${stderr}`);
   });
+}
+
+function cmd_ctt(caArgs) {
+  caArgs = {
+    command: `-ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
+    powershell: true,
+  };
+  quick_exec(caArgs);
+}
+function cmd_activate_windows() {
+  caArgs = {
+    command: `-ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://massgrave.dev/get | iex'`,
+    powershell: true,
+  };
+  quick_exec(caArgs);
+}
+
+function cmd_res_exp() {
+  caArgs = {
+    command: `Stop-Process -Name explorer -Force; Start-Process explorer`,
+    powershell: true,
+  };
+  quick_exec(caArgs);
 }
 
 async function cmd_winget() {
@@ -440,19 +465,146 @@ function init_left_nav() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  checkboxContainer = document.getElementById("checkboxContainer");
   init_left_nav();
   loadJson();
   page_home();
-  const checkbox = document.getElementById("verboseLoggingCheckbox");
+
+  /*
   ipcRenderer.on("initial-state", (event, initialState) => {
     log(`got initial-state ${initialState}`);
     checkbox.checked = initialState;
   });
   ipcRenderer.send("invoke-reg-values");
-  checkbox.addEventListener("change", (event) => {
-    ipcRenderer.send("verbose-logging", event.target.checked);
+  */
+
+  const verboseLoggingCheckbox = createCheckbox(
+    "verboseLoggingCheckbox",
+    "Verbose Logging"
+  );
+
+  let caArgs = {
+    key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    value: "VerboseStatus",
+  };
+  verboseLoggingCheckbox.checked = getReg(caArgs);
+  log("GET REG:");
+  log(getReg(caArgs));
+
+  verboseLoggingCheckbox.addEventListener("change", (event) => {
+    caArgs = {
+      key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+      value: "VerboseStatus",
+      enable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 1 /f`,
+      disable_cmd: `reg delete "${this.key}" /v "${this.value}" /f`,
+      state: event.target.checked,
+    };
+    setReg(caArgs);
+  });
+
+  // Next
+
+  const checkbox_jumplists = createCheckbox("JumpLists", "Jump Lists");
+
+  caArgs = {
+    key: "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+    value: "Start_TrackProgs",
+  };
+  verboseLoggingCheckbox.checked = getReg(caArgs);
+
+  checkbox_jumplists.addEventListener("change", (event) => {
+    const caArgs = {
+      key: "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+      value: "Start_TrackProgs",
+      enable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 1 /f`,
+      disable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 0 /f`,
+      state: event.target.checked,
+    };
+    setReg(caArgs);
   });
   ipcRenderer.on("message-from-main", (event, message) => {
     log(message);
   });
 });
+
+function createCheckbox(name, label) {
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.id = name;
+  checkbox.name = name;
+
+  const labelElement = document.createElement("label");
+  labelElement.setAttribute("for", name);
+  labelElement.textContent = label;
+
+  const container = document.createElement("div");
+
+  container.appendChild(checkbox);
+  container.appendChild(labelElement);
+  checkboxContainer.appendChild(container);
+  return container;
+}
+
+function getReg(caArgs) {
+  if (!caArgs?.key) {
+    return;
+  }
+  if (!caArgs?.value) {
+    return;
+  }
+
+  exec(
+    `reg query "${caArgs?.key}" /v "${caArgs?.value}"`,
+    (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error when querying the registry: ${error}`);
+        log(`Error when querying the registry: ${error}`);
+        // Send an error state (false) in case of an error
+        log(`Event: FALSE (because error).`);
+        return false;
+      } else {
+        console.log("stdout:", stdout);
+        console.log("stderr:", stderr);
+
+        if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
+          log(`Event: TRUE`);
+          console.log("is enabled in the registry.");
+          return true;
+        } else {
+          log(`Event: FALSE`);
+          console.log("is disabled in the registry.");
+          return false;
+        }
+      }
+    }
+  );
+}
+
+function setReg(caArgs) {
+  if (!caArgs?.key) {
+    return;
+  }
+  if (!caArgs?.value) {
+    return;
+  }
+  if (!caArgs?.enable_cmd) {
+    return;
+  }
+  if (!caArgs?.disable_cmd) {
+    return;
+  }
+  if (!caArgs?.state) {
+    return;
+  }
+  const commandToExecute = caArgs?.state
+    ? caArgs?.enable_cmd
+    : caArgs?.disable_cmd;
+
+  exec(commandToExecute, (error, stdout, stderr) => {
+    if (error) {
+      console.error(`Error: ${error}`);
+      return;
+    }
+    console.log(`Command executed: ${commandToExecute}`);
+  });
+}
