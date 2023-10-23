@@ -371,10 +371,12 @@ document.addEventListener("DOMContentLoaded", () => {
   loadJson();
   page_home();
   const checkbox = document.getElementById("verboseLoggingCheckbox");
-  ipcRenderer.on("initialize-checkbox", (event, initialState) => {
+  ipcRenderer.on("initialize-checkbox", (initialState) => {
+    console.log("initialize-checkbox received");
     checkbox.checked = initialState;
   });
   checkbox.addEventListener("change", (event) => {
     ipcRenderer.send("verbose-logging", event.target.checked);
   });
+  ipcRenderer.send("invoke-reg-values");
 });

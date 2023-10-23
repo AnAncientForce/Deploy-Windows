@@ -25,7 +25,6 @@ function createWindow() {
   }
   // mainWindow.maximize();
   mainWindow.loadFile("main/index.html");
-  init_values();
   Menu.setApplicationMenu(null);
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -38,8 +37,7 @@ ipcMain.on("close-application", () => {
   app.quit();
 });
 
-function init_values() {
-  // Read the registry value and set the initial checkbox state
+ipcMain.on("invoke-reg-values", (event) => {
   const registryKey =
     "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
   const registryValueName = "VerboseStatus";
@@ -47,19 +45,14 @@ function init_values() {
   exec(
     `reg query "${registryKey}" /v "${registryValueName}"`,
     (error, stdout, stderr) => {
-      if (!error) {
-        // Check if the registry value exists and its data
-        if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
-          // Enable verbose logging
-          mainWindow.webContents.send("initialize-checkbox", true);
-        } else {
-          // Disable verbose logging
-          mainWindow.webContents.send("initialize-checkbox", false);
-        }
+      if (!error && stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
+        event.reply("initial-state", true);
+      } else {
+        event.reply("initial-state", false);
       }
     }
   );
-}
+});
 
 ipcMain.on("verbose-logging", (event, enableLogging) => {
   const registryKey =
