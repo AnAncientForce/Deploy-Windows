@@ -508,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
     key: "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
     value: "Start_TrackProgs",
   };
-  verboseLoggingCheckbox.checked = getReg(caArgs);
+  checkbox_jumplists.checked = getReg(caArgs);
 
   checkbox_jumplists.addEventListener("change", (event) => {
     const caArgs = {
