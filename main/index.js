@@ -371,8 +371,7 @@ document.addEventListener("DOMContentLoaded", () => {
   loadJson();
   page_home();
   const checkbox = document.getElementById("verboseLoggingCheckbox");
-  ipcRenderer.on("initialize-checkbox", (initialState) => {
-    console.log("initialize-checkbox received");
+  ipcRenderer.on("initial-state", (initialState) => {
     checkbox.checked = initialState;
   });
   checkbox.addEventListener("change", (event) => {

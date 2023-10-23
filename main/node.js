@@ -47,8 +47,10 @@ ipcMain.on("invoke-reg-values", (event) => {
     (error, stdout, stderr) => {
       if (!error && stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
         event.reply("initial-state", true);
+        console.log("Verbose logging is enabled in the registry.");
       } else {
         event.reply("initial-state", false);
+        console.log("Verbose logging is disabled in the registry.");
       }
     }
   );
