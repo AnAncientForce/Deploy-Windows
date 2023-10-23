@@ -484,9 +484,11 @@ document.addEventListener("DOMContentLoaded", () => {
   );
 
   let caArgs = {
-    key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-    value: "VerboseStatus",
-    format: "0x1",
+    registryKey:
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    registryValueName: "VerboseStatus",
+    registryValueType: "0x1",
+    registryValueData: "1",
   };
   verboseLoggingCheckbox.checked = getReg(caArgs);
   log("GET REG:");
@@ -494,8 +496,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   verboseLoggingCheckbox.addEventListener("change", (event) => {
     caArgs = {
-      enable_cmd: `reg add "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" /v "VerboseStatus" /t REG_DWORD /d 1 /f`,
-      disable_cmd: `reg delete "${this.key}" /v "${this.value}" /f`,
+      registryKey:
+        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+      registryValueName: "VerboseStatus",
+      registryValueType: "REG_DWORD",
+      registryValueData: "1",
       state: event.target.checked,
     };
     setReg(caArgs);
@@ -506,16 +511,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkbox_jumplists = createCheckbox("JumpLists", "Jump Lists");
 
   caArgs = {
-    key: "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-    value: "EnableBalloonTips",
-    format: "0x1",
+    registryKey:
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+    registryValueName: "EnableXamlJumpView",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
   };
   checkbox_jumplists.checked = getReg(caArgs);
 
   checkbox_jumplists.addEventListener("change", (event) => {
     const caArgs = {
-      enable_cmd: `reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v "EnableBalloonTips" /t REG_DWORD /d 1 /f`,
-      disable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 0 /f`,
+      registryKey:
+        "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+      registryValueName: "EnableXamlJumpView",
+      registryValueType: "REG_DWORD",
+      registryValueData: "1",
       state: event.target.checked,
     };
     setReg(caArgs);
@@ -544,15 +554,21 @@ function createCheckbox(name, label) {
 }
 
 function getReg(caArgs) {
-  if (!caArgs?.key) {
+  if (!caArgs?.registryKey) {
     return;
   }
-  if (!caArgs?.value) {
+  if (!caArgs?.registryValueName) {
+    return;
+  }
+  if (!caArgs?.registryValueType) {
+    return;
+  }
+  if (!caArgs?.registryValueData) {
     return;
   }
 
   exec(
-    `reg query "${caArgs?.key}" /v "${caArgs?.value}"`,
+    `reg query "${registryKey}" /v "${registryValueName}" /t ${registryValueType} /d "${registryValueData}"`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error when querying the registry: ${error}`);
@@ -579,18 +595,24 @@ function getReg(caArgs) {
 }
 
 function setReg(caArgs) {
-  if (!caArgs?.enable_cmd) {
+  if (!caArgs?.registryKey) {
     return;
   }
-  if (!caArgs?.disable_cmd) {
+  if (!caArgs?.registryValueName) {
+    return;
+  }
+  if (!caArgs?.registryValueType) {
+    return;
+  }
+  if (!caArgs?.registryValueData) {
     return;
   }
   if (!caArgs?.state) {
     return;
   }
-  const commandToExecute = caArgs?.state
-    ? caArgs?.enable_cmd
-    : caArgs?.disable_cmd;
+  const enable_command = `reg add "${registryKey}" /v "${registryValueName}" /t ${registryValueType} /d ${registryValueData} /f`;
+  const disable_command = `reg delete "${registryKey}" /v "${registryValueName}" /f`;
+  const commandToExecute = caArgs?.state ? enable_command : disable_command;
 
   exec(commandToExecute, (error, stdout, stderr) => {
     if (error) {
