@@ -568,7 +568,7 @@ function getReg(caArgs) {
   }
 
   exec(
-    `reg query "${registryKey}" /v "${registryValueName}" /t ${registryValueType} /d "${registryValueData}"`,
+    `reg query "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /t ${caArgs?.registryValueType} /d "${caArgs?.registryValueData}"`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error when querying the registry: ${error}`);
@@ -610,8 +610,8 @@ function setReg(caArgs) {
   if (!caArgs?.state) {
     return;
   }
-  const enable_command = `reg add "${registryKey}" /v "${registryValueName}" /t ${registryValueType} /d ${registryValueData} /f`;
-  const disable_command = `reg delete "${registryKey}" /v "${registryValueName}" /f`;
+  const enable_command = `reg add "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /t ${caArgs?.registryValueType} /d ${caArgs?.registryValueData} /f`;
+  const disable_command = `reg delete "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /f`;
   const commandToExecute = caArgs?.state ? enable_command : disable_command;
 
   exec(commandToExecute, (error, stdout, stderr) => {
