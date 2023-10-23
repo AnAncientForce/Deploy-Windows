@@ -1,14 +1,11 @@
-// sysZ
 const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const { exec } = require("child_process");
-const { spawn } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const dialog = require("../modules/dialog.js");
 const helper = require("../modules/helper.js");
-const { group } = require("console");
 
 var actionIndexer = 0;
 var booleanStorage = {};
@@ -20,12 +17,20 @@ var packages;
 var portable_exes;
 
 var current_selected_menu_item;
+var powershell =
+  "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe";
 
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
 }
 function checkBoolean(key) {
   return booleanStorage[key];
+}
+
+function log(txt) {
+  const textarea = document.getElementById("logger");
+  textarea.value += "\n" + txt;
+  textarea.scrollTop = textarea.scrollHeight;
 }
 
 function createAction(text, optionalClass, section, action, caArgs) {
@@ -94,7 +99,7 @@ function createAction(text, optionalClass, section, action, caArgs) {
     document.getElementById(section).appendChild(div);
   }
 
-  // console.log("Appended", `action${actionIndexer}`, text);
+  // log("Appended", `action${actionIndexer}`, text);
   caArgs = {};
   return div;
 }
@@ -225,7 +230,7 @@ function page_home() {
 
 function cmd_open_urls() {
   addons.forEach((url) => {
-    console.log(`> ${url}`);
+    log(`> ${url}`);
     shell.openExternal(url);
   });
 }
@@ -241,7 +246,7 @@ function cmd_set_lock_bg() {
       if (error) {
         console.error(`Error: ${error}`);
       }
-      console.log(`stdout: ${stdout}`);
+      log(`stdout: ${stdout}`);
       console.error(`stderr: ${stderr}`);
     }
   );
@@ -255,7 +260,7 @@ function cmd_god_mode() {
         console.error(`Error: ${error}`);
         return;
       }
-      console.log(`stdout: ${stdout}`);
+      log(`stdout: ${stdout}`);
       console.error(`stderr: ${stderr}`);
     }
   );
@@ -263,12 +268,12 @@ function cmd_god_mode() {
 
 function cmd_ctt() {
   exec(
-    `C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe -ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
+    `${powershell} -ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error: ${error}`);
       }
-      console.log(`stdout: ${stdout}`);
+      log(`stdout: ${stdout}`);
       console.error(`stderr: ${stderr}`);
     }
   );
@@ -280,14 +285,14 @@ function cmd_res_exp() {
     if (error) {
       console.error(`Error: ${error}`);
     }
-    console.log(`stdout: ${stdout}`);
+    log(`stdout: ${stdout}`);
     console.error(`stderr: ${stderr}`);
   });
 }
 
 function cmd_winget() {
   for (const package of packages) {
-    console.log(`Installing ${package}...`);
+    log(`Installing ${package}...`);
     exec(
       `winget install ${package}`,
       { shell: true },
@@ -298,7 +303,7 @@ function cmd_winget() {
           );
         } else {
           if (stdout) {
-            console.log(`${package} has been successfully installed.`);
+            log(`${package} has been successfully installed.`);
           } else {
             console.error(`Failed to install ${package}. Error: ${stderr}`);
           }
@@ -306,7 +311,23 @@ function cmd_winget() {
       }
     );
   }
-  console.log("All packages have been upgraded / installed");
+  log("All packages have been upgraded / installed");
+}
+
+function page_settings() {
+  changeSection("section-settings");
+  createAction(
+    "defaukt",
+    "square-button",
+    "section-settings-btns",
+    function () {},
+    {
+      showTitle: true,
+      useImg: true,
+      imgSrc: "../images/autostart.png",
+      imgAlt: "Help",
+    }
+  );
 }
 
 function loadJson() {
@@ -337,8 +358,7 @@ function init_left_nav() {
     "perm-btn",
     "left-nav",
     function () {
-      // changeSection("section-home");
-      page_home();
+      page_settings();
     },
     {
       highlight: true,
@@ -350,4 +370,9 @@ document.addEventListener("DOMContentLoaded", () => {
   init_left_nav();
   loadJson();
   page_home();
+
+  const checkbox = document.getElementById("verboseLoggingCheckbox");
+  checkbox.addEventListener("change", (event) => {
+    ipcRenderer.send("verbose-logging", event.target.checked);
+  });
 });

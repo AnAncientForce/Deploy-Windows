@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Main Interface</title>
@@ -14,15 +15,23 @@
     <div id="main" class="row">
       <div id="left-nav" class="column"></div>
       <div id="section-content">
-        <section id="section-load">
-          <div class="center">
-            <img id="load_img" class="spin" src="../images/load.png" />
-          </div>
-        </section>
         <section id="section-home">
           <h1 style="text-align: center">Main Interface</h1>
           <div id="section-home-btns" class="row"></div>
         </section>
+        <section id="section-settings">
+          <h1 style="text-align: center">Settings</h1>
+          <div id="section-settings-btns" class="row"></div>
+          <input
+            type="checkbox"
+            id="verboseLoggingCheckbox"
+            name="verboseLoggingCheckbox"
+          />
+          <label for="verboseLoggingCheckbox">Verbose Logging</label>
+        </section>
+        <div class="row">
+          <textarea id="logger" readonly></textarea>
+        </div>
       </div>
     </div>
   </body>
