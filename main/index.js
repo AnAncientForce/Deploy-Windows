@@ -100,6 +100,24 @@ function createAction(text, optionalClass, section, action, caArgs) {
   }
 
   // log("Appended", `action${actionIndexer}`, text);
+
+  // Enable flash feedback
+  div.addEventListener("click", function () {
+    console.log("fade feedback");
+    if (checkBoolean("fading")) {
+      return;
+    }
+    saveBoolean("fading", true);
+    const main = document.getElementById("main");
+    main.style.backgroundColor = "skyblue";
+    const transitionEndHandler = () => {
+      main.removeEventListener("transitionend", transitionEndHandler);
+      main.style.backgroundColor = "transparent";
+      saveBoolean("fading", false);
+    };
+    main.addEventListener("transitionend", transitionEndHandler);
+  });
+
   caArgs = {};
   return div;
 }
@@ -343,6 +361,10 @@ function page_settings() {
 }
 
 function dynamicSettings() {
+  if (checkBoolean("initial_launch")) {
+    return;
+  }
+  saveBoolean("initial_launch", true);
   const settings_json = path.join(path.dirname(__dirname), "settings.json");
   const jsonData = require(settings_json);
   const checkboxContainer = document.getElementById("checkboxContainer");

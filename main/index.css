@@ -67,6 +67,10 @@ body {
   }
 }
 
+#main{
+  transition: background-color 1s;
+}
+
 #left-nav {
   float: left 0;
   height: 100vh;
