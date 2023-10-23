@@ -290,26 +290,35 @@ function cmd_res_exp() {
   });
 }
 
-function cmd_winget() {
+async function cmd_winget() {
   for (const package of packages) {
     log(`Installing ${package}...`);
-    exec(
-      `winget install ${package}`,
-      { shell: true },
-      (error, stdout, stderr) => {
-        if (error) {
-          console.error(
-            `Failed to install ${package}. Error: ${error.message}`
-          );
-        } else {
-          if (stdout) {
-            log(`${package} has been successfully installed.`);
-          } else {
-            console.error(`Failed to install ${package}. Error: ${stderr}`);
+    try {
+      await new Promise((resolve, reject) => {
+        exec(
+          `winget install ${package}`,
+          { shell: true },
+          (error, stdout, stderr) => {
+            if (error) {
+              console.error(
+                `Failed to install ${package}. Error: ${error.message}`
+              );
+              reject(error);
+            } else if (stdout) {
+              log(`${package} has been successfully installed.`);
+              resolve();
+            } else {
+              console.error(`Failed to install ${package}. Error: ${stderr}`);
+              reject(stderr);
+            }
           }
-        }
-      }
-    );
+        );
+      });
+    } catch (error) {
+      // Handle the error if installation fails
+      // You can choose to stop the installation process or continue with the next package
+      log(error);
+    }
   }
   log("All packages have been upgraded / installed");
 }
