@@ -381,4 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkbox.addEventListener("change", (event) => {
     ipcRenderer.send("verbose-logging", event.target.checked);
   });
+  ipcRenderer.on("message-from-main", (event, message) => {
+    log(message);
+  });
 });

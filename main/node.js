@@ -38,6 +38,7 @@ ipcMain.on("close-application", () => {
 });
 
 ipcMain.on("invoke-reg-values", (event) => {
+  // mainWindow.webContents.send("message-from-main", `Logged to secondary process`);
   const registryKey =
     "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System";
   const registryValueName = "VerboseStatus";
@@ -47,6 +48,14 @@ ipcMain.on("invoke-reg-values", (event) => {
     (error, stdout, stderr) => {
       if (error) {
         console.error(`Error when querying the registry: ${error}`);
+        mainWindow.webContents.send(
+          "message-from-main",
+          `Error when querying the registry: ${error}`
+        );
+        ipcMain.emit(
+          "message-from-main",
+          `Error when querying the registry: ${error}`
+        );
         // Send an error state (false) in case of an error
         event.reply("initial-state", false);
       } else {
