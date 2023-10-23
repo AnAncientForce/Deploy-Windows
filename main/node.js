@@ -45,12 +45,21 @@ ipcMain.on("invoke-reg-values", (event) => {
   exec(
     `reg query "${registryKey}" /v "${registryValueName}"`,
     (error, stdout, stderr) => {
-      if (!error && stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
-        event.reply("initial-state", true);
-        console.log("Verbose logging is enabled in the registry.");
-      } else {
+      if (error) {
+        console.error(`Error when querying the registry: ${error}`);
+        // Send an error state (false) in case of an error
         event.reply("initial-state", false);
-        console.log("Verbose logging is disabled in the registry.");
+      } else {
+        console.log("stdout:", stdout);
+        console.log("stderr:", stderr);
+
+        if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
+          event.reply("initial-state", true);
+          console.log("Verbose logging is enabled in the registry.");
+        } else {
+          event.reply("initial-state", false);
+          console.log("Verbose logging is disabled in the registry.");
+        }
       }
     }
   );
