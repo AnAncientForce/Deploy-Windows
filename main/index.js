@@ -486,6 +486,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let caArgs = {
     key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
     value: "VerboseStatus",
+    format: "0x1",
   };
   verboseLoggingCheckbox.checked = getReg(caArgs);
   log("GET REG:");
@@ -505,14 +506,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const checkbox_jumplists = createCheckbox("JumpLists", "Jump Lists");
 
   caArgs = {
-    key: "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-    value: "Start_TrackProgs",
+    key: "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+    value: "EnableBalloonTips",
+    format: "0x1",
   };
   checkbox_jumplists.checked = getReg(caArgs);
 
   checkbox_jumplists.addEventListener("change", (event) => {
     const caArgs = {
-      enable_cmd: `reg add "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v "Start_TrackProgs" /t REG_DWORD /d 1 /f`,
+      enable_cmd: `reg add "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v "EnableBalloonTips" /t REG_DWORD /d 1 /f`,
       disable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 0 /f`,
       state: event.target.checked,
     };
