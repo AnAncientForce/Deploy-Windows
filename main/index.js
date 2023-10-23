@@ -294,7 +294,7 @@ async function cmd_winget() {
   for (const package of packages) {
     log(`Installing ${package}...`);
     try {
-      await new Promise((resolve, reject) => {
+      const { stdout, stderr } = await new Promise((resolve, reject) => {
         exec(
           `winget install ${package}`,
           { shell: true },
@@ -306,7 +306,7 @@ async function cmd_winget() {
               reject(error);
             } else if (stdout) {
               log(`${package} has been successfully installed.`);
-              resolve();
+              resolve({ stdout, stderr });
             } else {
               console.error(`Failed to install ${package}. Error: ${stderr}`);
               reject(stderr);
@@ -314,10 +314,13 @@ async function cmd_winget() {
           }
         );
       });
+
+      // You can log the specific stdout and stderr here if needed.
+      // For example, log(stdout) and log(stderr).
     } catch (error) {
       // Handle the error if installation fails
       // You can choose to stop the installation process or continue with the next package
-      log(error);
+      console.error(`Installation failed for ${package}. Error: ${error}`);
     }
   }
   log("All packages have been upgraded / installed");
