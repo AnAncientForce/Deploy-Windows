@@ -314,12 +314,9 @@ async function cmd_winget() {
           }
         );
       });
-
-      // You can log the specific stdout and stderr here if needed.
-      // For example, log(stdout) and log(stderr).
+      log(stdout);
+      log(stderr);
     } catch (error) {
-      // Handle the error if installation fails
-      // You can choose to stop the installation process or continue with the next package
       console.error(`Installation failed for ${package}. Error: ${error}`);
     }
   }
