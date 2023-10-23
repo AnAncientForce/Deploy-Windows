@@ -493,9 +493,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   verboseLoggingCheckbox.addEventListener("change", (event) => {
     caArgs = {
-      key: "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-      value: "VerboseStatus",
-      enable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 1 /f`,
+      enable_cmd: `reg add "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System" /v "VerboseStatus" /t REG_DWORD /d 1 /f`,
       disable_cmd: `reg delete "${this.key}" /v "${this.value}" /f`,
       state: event.target.checked,
     };
@@ -514,9 +512,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   checkbox_jumplists.addEventListener("change", (event) => {
     const caArgs = {
-      key: "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-      value: "Start_TrackProgs",
-      enable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 1 /f`,
+      enable_cmd: `reg add "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced" /v "Start_TrackProgs" /t REG_DWORD /d 1 /f`,
       disable_cmd: `reg add "${this.key}" /v "${this.value}" /t REG_DWORD /d 0 /f`,
       state: event.target.checked,
     };
@@ -581,12 +577,6 @@ function getReg(caArgs) {
 }
 
 function setReg(caArgs) {
-  if (!caArgs?.key) {
-    return;
-  }
-  if (!caArgs?.value) {
-    return;
-  }
   if (!caArgs?.enable_cmd) {
     return;
   }
