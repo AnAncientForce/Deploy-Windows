@@ -22,13 +22,19 @@
         <section id="section-settings">
           <h1 style="text-align: center">Settings</h1>
           <div id="section-settings-btns" class="row"></div>
-          <input
-            type="checkbox"
-            id="verboseLoggingCheckbox"
-            name="verboseLoggingCheckbox"
-          />
-          <label for="verboseLoggingCheckbox">Verbose Logging</label>
+          <div class="column">
+            <p class="header">Registry Values</p>
+            <div id="checkboxContainer" class="row">
+              <input
+                type="checkbox"
+                id="verboseLoggingCheckbox"
+                name="verboseLoggingCheckbox"
+              />
+              <label for="verboseLoggingCheckbox">Verbose Logging</label>
+            </div>
+          </div>
         </section>
+        <div class="gap"></div>
         <div class="row">
           <textarea id="logger" readonly></textarea>
         </div>

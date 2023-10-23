@@ -316,6 +316,7 @@ function cmd_winget() {
 
 function page_settings() {
   changeSection("section-settings");
+  /*
   createAction(
     "defaukt",
     "square-button",
@@ -328,6 +329,7 @@ function page_settings() {
       imgAlt: "Help",
     }
   );
+  */
 }
 
 function loadJson() {
