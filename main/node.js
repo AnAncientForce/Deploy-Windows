@@ -16,11 +16,7 @@ function createWindow() {
       contextIsolation: false,
     },
   });
-  if (helper.isUsingLinux()) {
-    if (helper.readJSONValue("developer_mode")) {
-      mainWindow.webContents.openDevTools();
-    }
-  } else {
+  if (helper.readJSONValue("developer_mode")) {
     mainWindow.webContents.openDevTools();
   }
   // mainWindow.maximize();
@@ -91,4 +87,8 @@ ipcMain.on("verbose-logging", (event, enableLogging) => {
     }
     console.log(`Command executed: ${commandToExecute}`);
   });
+});
+
+ipcMain.on("dev", () => {
+  mainWindow.webContents.openDevTools();
 });

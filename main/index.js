@@ -316,6 +316,7 @@ function cmd_winget() {
 
 function page_settings() {
   changeSection("section-settings");
+  dynamicSettings();
   /*
   createAction(
     "defaukt",
@@ -330,6 +331,45 @@ function page_settings() {
     }
   );
   */
+}
+
+function dynamicSettings() {
+  const settings_json = path.join(path.dirname(__dirname), "settings.json");
+  const jsonData = require(settings_json);
+  const checkboxContainer = document.getElementById("checkboxContainer");
+
+  for (const key in jsonData) {
+    if (jsonData.hasOwnProperty(key) && typeof jsonData[key] === "boolean") {
+      const checkboxLabel = document.createElement("label");
+      checkboxLabel.classList.add("checkbox-label");
+
+      const checkbox = document.createElement("input");
+      checkbox.type = "checkbox";
+      checkbox.id = key;
+      checkbox.checked = jsonData[key];
+
+      const label = document.createTextNode(key);
+
+      checkboxLabel.appendChild(checkbox);
+      checkboxLabel.appendChild(label);
+
+      checkboxContainer.appendChild(checkboxLabel);
+
+      checkbox.addEventListener(
+        "change",
+        (function (changedKey) {
+          return function () {
+            jsonData[changedKey] = this.checked;
+            log(changedKey);
+            if (changedKey === "developer_mode") {
+              ipcRenderer.send("dev");
+            }
+            fs.writeFileSync(settings_json, JSON.stringify(jsonData, null, 2));
+          };
+        })(key)
+      );
+    }
+  }
 }
 
 function loadJson() {

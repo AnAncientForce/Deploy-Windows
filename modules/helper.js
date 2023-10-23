@@ -4,7 +4,7 @@ const path = require("path");
 
 var jSettings = null;
 try {
-  jSettings = `${os.homedir()}/.config/sysZ/config.json`;
+  jSettings = path.join(path.dirname(__dirname), "settings.json");
 } catch (error) {
   console.error("Error reading JSON file:", error.message);
   return null;
