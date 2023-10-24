@@ -687,36 +687,44 @@ function getReg(caArgs) {
 }
 
 function setReg(caArgs) {
-  /* for boolean keys only */
   if (
     !caArgs?.registryKey ||
     !caArgs?.registryValueName ||
     !caArgs?.registryValueType ||
     !caArgs?.registryValueData
   ) {
+    log("Incomplete arguments for modifying the registry.");
     console.error("Incomplete arguments for modifying the registry.");
     return;
   }
-
   if (initializing_values) {
-    console.log("Main Interface is busy. Try again later.");
+    log("Main Interface is busy. Try again later.");
     return;
   } else {
     initializing_values = true;
   }
+  /*
+  const commandToExecute = caArgs.state
+    ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
+    : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
+  */
 
-  const checkKeyCommand = `reg query "${caArgs.registryKey}"`;
-  exec(checkKeyCommand, (error, stdout, stderr) => {
+  exec(`reg query "${caArgs.registryKey}"`, (error, stdout, stderr) => {
     if (error) {
-      log(
-        `Error: The specified registry key (${caArgs.registryKey}) doesn't exist.`
-      );
+      // Registry key doesn't exist, throw an error
       console.error(`Error: The specified registry key doesn't exist.`);
       initializing_values = false;
       return;
     }
 
-    const commandToExecute = `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`;
+    if (!caArgs.state) {
+      // if state is false, set value to 0 = 0x0 = false
+      caArgs.registryValueData = "0";
+    }
+
+    const commandToExecute = caArgs.state
+      ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
+      : `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`;
 
     exec(commandToExecute, (error, stdout, stderr) => {
       if (error) {
