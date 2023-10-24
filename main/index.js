@@ -586,15 +586,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createCheckableReg({
     registryKey:
-      "HKLM\\SOFTWARE\\Microsoft\\System\\ControlSet001\\Control\\GraphicsDrivers",
-    registryValueName: "HwSchMode",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-  });
-
-  createCheckableReg({
-    registryKey:
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
     registryValueData: "0",
