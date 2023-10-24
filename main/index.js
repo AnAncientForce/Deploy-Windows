@@ -584,7 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
     prompt: "Toggle Jump Lists",
     registryKey:
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-    registryValueName: "EnableXamlJumpView",
+    registryValueName: "Start_TrackDocs",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
   });
