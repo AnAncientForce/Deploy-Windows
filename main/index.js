@@ -531,8 +531,31 @@ function load_themes() {
     }
   });
 }
+
+function validateMissingKeys() {
+  const keysToValidate = [
+    { key: "developer_mode", type: "boolean" },
+    { key: "custom_theme", type: "boolean" },
+    { key: "wallpaper", type: "string" },
+  ];
+  const jsonObject = helper.getSettings();
+  console.log("validating json keys");
+  keysToValidate.forEach(({ key, type }) => {
+    if (!(key in jsonObject)) {
+      if (type === "boolean") {
+        jsonObject[key] = false;
+      } else if (type === "string") {
+        jsonObject[key] = "none";
+      }
+      helper.writeSettings(jsonObject);
+    }
+  });
+  log("json validation success");
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   checkboxContainer = document.getElementById("checkboxContainer");
+  validateMissingKeys();
   load_themes();
   init_left_nav();
   loadJson();
