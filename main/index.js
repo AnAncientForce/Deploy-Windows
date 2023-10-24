@@ -634,6 +634,7 @@ function createCheckableReg(caArgs) {
     registryValueName: caArgs?.registryValueName,
     registryValueType: caArgs?.registryValueType,
     registryValueData: caArgs?.registryValueData,
+    OriginalValue: caArgs?.OriginalValue,
   })
     .then((result) => {
       checkbox.checked = result;
@@ -649,6 +650,7 @@ function createCheckableReg(caArgs) {
       registryValueName: caArgs?.registryValueName,
       registryValueType: caArgs?.registryValueType,
       registryValueData: caArgs?.registryValueData,
+      OriginalValue: caArgs?.OriginalValue,
       state: event.target.checked,
     });
   });
