@@ -572,39 +572,53 @@ document.addEventListener("DOMContentLoaded", () => {
   */
 
   createCheckableReg({
-    prompt: "Toggle Verbose Status",
+    prompt: "Verbose Status",
     registryKey:
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
     registryValueName: "VerboseStatus",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
+    OriginalValue: "0",
   });
 
   createCheckableReg({
-    prompt: "Toggle Jump Lists",
+    prompt: "Jump Lists",
     registryKey:
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
     registryValueName: "Start_TrackDocs",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
+    OriginalValue: "0",
   });
 
   createCheckableReg({
-    prompt: "Toggle Light Mode (System)",
+    prompt: "Light Mode (System)",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
+    OriginalValue: "0",
   });
 
   createCheckableReg({
-    prompt: "Toggle Light Mode (User)",
+    prompt: "Light Mode (User)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
+    OriginalValue: "0",
+  });
+
+  createCheckableReg({
+    prompt: "People",
+    registryKey:
+      "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People",
+    registryValueName: "PeopleBand",
+    registryValueType: "REG_DWORD",
+    registryValueData: "0",
+    OriginalValue: "1",
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {
@@ -691,7 +705,8 @@ function setReg(caArgs) {
     !caArgs?.registryKey ||
     !caArgs?.registryValueName ||
     !caArgs?.registryValueType ||
-    !caArgs?.registryValueData
+    !caArgs?.registryValueType ||
+    !caArgs?.OriginalValue
   ) {
     log("Incomplete arguments for modifying the registry.");
     console.error("Incomplete arguments for modifying the registry.");
@@ -718,8 +733,9 @@ function setReg(caArgs) {
     }
 
     if (!caArgs.state) {
-      // if state is false, set value to 0 = 0x0 = false
-      caArgs.registryValueData = "0";
+      // ~~if state is false, set value to 0 = 0x0 = false~~
+      // if state if false, set to original value
+      caArgs.registryValueData = caArgs.OriginalValue;
     }
 
     const commandToExecute = caArgs.state
