@@ -697,11 +697,12 @@ function getReg(caArgs) {
           // 0x1 = true, 0x0 = false
           resolve(true);
         }
-        if (
-          stdout.includes("REG_SZ") &&
-          (stdout.includes("Allow") || stdout.includes("Deny"))
-        ) {
+        if (stdout.includes("REG_SZ") && stdout.includes("Allow")) {
+          log("Temp location true ");
           resolve(true);
+        } else if (stdout.includes("REG_SZ") && stdout.includes("Deny")) {
+          log("Temp location false ");
+          resolve(false);
         }
 
         // non matched, so resolve false
