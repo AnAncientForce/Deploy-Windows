@@ -18,8 +18,8 @@ var portable_exes;
 
 var current_selected_menu_item;
 var powershell;
-var checkboxContainer;
-
+var checkboxContainer1;
+var checkboxContainer2;
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
 }
@@ -399,8 +399,6 @@ function dynamicSettings() {
   saveBoolean("initial_launch", true);
   const settings_json = path.join(path.dirname(__dirname), "settings.json");
   const jsonData = require(settings_json);
-  const checkboxContainer = document.getElementById("checkboxContainer");
-
   for (const key in jsonData) {
     if (jsonData.hasOwnProperty(key) && typeof jsonData[key] === "boolean") {
       const checkboxLabel = document.createElement("label");
@@ -416,7 +414,7 @@ function dynamicSettings() {
       checkboxLabel.appendChild(checkbox);
       checkboxLabel.appendChild(label);
 
-      checkboxContainer.appendChild(checkboxLabel);
+      checkboxContainer2.appendChild(checkboxLabel);
 
       checkbox.addEventListener(
         "change",
@@ -554,7 +552,8 @@ function validateMissingKeys() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  checkboxContainer = document.getElementById("checkboxContainer");
+  checkboxContainer1 = document.getElementById("checkboxContainer1");
+  checkboxContainer2 = document.getElementById("checkboxContainer2");
   validateMissingKeys();
   load_themes();
   init_left_nav();
@@ -591,6 +590,14 @@ document.addEventListener("DOMContentLoaded", () => {
     registryValueName: "HwSchMode",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
+  });
+
+  createCheckableReg({
+    registryKey:
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+    registryValueName: "AppsUseLightTheme",
+    registryValueType: "REG_DWORD",
+    registryValueData: "0",
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {
@@ -643,7 +650,8 @@ function createCheckbox(name, label) {
 
   container.appendChild(checkbox);
   container.appendChild(labelElement);
-  checkboxContainer.appendChild(container);
+  container.classList.add("checkbox-label");
+  checkboxContainer1.appendChild(container);
   return checkbox;
 }
 function getReg(caArgs) {
