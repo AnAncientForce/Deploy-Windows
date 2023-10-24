@@ -616,8 +616,8 @@ document.addEventListener("DOMContentLoaded", () => {
     registryKey: "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows",
     registryValueName: "DisableNotificationCenter",
     registryValueType: "REG_DWORD",
-    registryValueData: "0",
-    OriginalValue: "1",
+    registryValueData: "1",
+    OriginalValue: "0",
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {
