@@ -1,0 +1,7 @@
+This tool was designed to help load your custom configurations into Windows 10 with the click of a few buttons. It also acts as a quick control panel.
+
+There is a preset data.json file which holds the user's configuration preferences.
+^ Note: This only includes applications found in winget.
+
+In the "Settings" tab, there are checkboxes where you can easily set registry values.
+^ Note: This software currently does not have the functionality to save/load service preferences.

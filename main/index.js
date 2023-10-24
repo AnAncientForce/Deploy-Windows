@@ -1,10 +1,10 @@
-const { ipcRenderer } = require("electron");
+const { ipcRenderer, dialog } = require("electron");
 const { shell } = require("electron");
 const { exec } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const dialog = require("../modules/dialog.js");
+// const dialog = require("../modules/dialog.js");
 const helper = require("../modules/helper.js");
 
 var actionIndexer = 0;
@@ -369,12 +369,20 @@ async function cmd_winget() {
 function page_settings() {
   changeSection("section-settings");
   dynamicSettings();
-  /*
   createAction(
-    "defaukt",
+    "Change Theme",
     "square-button",
     "section-settings-btns",
-    function () {},
+    function () {
+      ipcRenderer.send("chooseFile");
+      ipcRenderer.on("chosenFile", (event, base64) => {
+        const src = `data:image/jpg;base64,${base64}`;
+        log(base64);
+        const jsonObject = helper.getSettings();
+        jsonObject["wallpaper"] = base64;
+        helper.writeSettings(jsonObject);
+      });
+    },
     {
       showTitle: true,
       useImg: true,
@@ -382,7 +390,6 @@ function page_settings() {
       imgAlt: "Help",
     }
   );
-  */
 }
 
 function dynamicSettings() {
@@ -421,11 +428,47 @@ function dynamicSettings() {
               ipcRenderer.send("dev");
             }
             fs.writeFileSync(settings_json, JSON.stringify(jsonData, null, 2));
+            if (changedKey === "custom_theme") {
+              load_themes();
+            }
           };
         })(key)
       );
     }
   }
+}
+
+function loadDoc(doc) {
+  fs.readFile(
+    path.join(__dirname, "../docs/" + doc + ".txt"),
+    "utf8",
+    (error, content) => {
+      if (error) {
+        console.error("Error reading file:", error);
+        return;
+      }
+      document.getElementById("text-box").value = content;
+    }
+  );
+}
+
+function page_help() {
+  changeSection("section-help");
+  const parent = "section-help-btns";
+  console.log("reading path:", path.join(__dirname, "../docs/"));
+  fs.readdir(path.join(__dirname, "../docs/"), (err, files) => {
+    if (err) {
+      console.error(`Error reading folder: ${err}`);
+      return;
+    }
+    files.forEach((file) => {
+      file = file.replace(".txt", "");
+      console.log(file);
+      createAction(file, "square-button", parent, function () {
+        loadDoc(file);
+      });
+    });
+  });
 }
 
 function loadJson() {
@@ -440,11 +483,21 @@ function loadJson() {
 
 function init_left_nav() {
   createAction(
+    "Help",
+    "perm-btn",
+    "left-nav",
+    function () {
+      page_help();
+    },
+    {
+      highlight: true,
+    }
+  );
+  createAction(
     "Operations",
     "perm-btn",
     "left-nav",
     function () {
-      // changeSection("section-home")
       page_home();
     },
     {
@@ -463,9 +516,24 @@ function init_left_nav() {
     }
   );
 }
-
+function load_themes() {
+  const jsonObject = helper.getSettings();
+  if (!jsonObject["custom_theme"]) {
+    document.getElementById("image_shower").src =
+      "../images/LockScreenWallpaper.jpg";
+    return;
+  }
+  fs.access(jsonObject["wallpaper"], fs.constants.F_OK, (err) => {
+    if (err) {
+      log("Error reading theme");
+    } else {
+      document.getElementById("image_shower").src = jsonObject["wallpaper"];
+    }
+  });
+}
 document.addEventListener("DOMContentLoaded", () => {
   checkboxContainer = document.getElementById("checkboxContainer");
+  load_themes();
   init_left_nav();
   loadJson();
   page_home();
@@ -478,75 +546,57 @@ document.addEventListener("DOMContentLoaded", () => {
   ipcRenderer.send("invoke-reg-values");
   */
 
-  const verboseLoggingCheckbox = createCheckbox(
-    "verboseLoggingCheckbox",
-    "Verbose Logging"
-  );
-
-  let caArgs = {
+  createCheckableReg({
     registryKey:
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
     registryValueName: "VerboseStatus",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
-  };
-
-  getReg(caArgs)
-    .then((result) => {
-      verboseLoggingCheckbox.checked = result;
-    })
-    .catch((error) => {
-      log(error);
-      console.error(error);
-    });
-
-  verboseLoggingCheckbox.addEventListener("change", (event) => {
-    caArgs = {
-      registryKey:
-        "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-      registryValueName: "VerboseStatus",
-      registryValueType: "REG_DWORD",
-      registryValueData: "1",
-      state: event.target.checked,
-    };
-    setReg(caArgs);
   });
 
-  // Next
-
-  const checkbox_jumplists = createCheckbox("JumpLists", "Jump Lists");
-
-  caArgs = {
+  createCheckableReg({
     registryKey:
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
     registryValueName: "EnableXamlJumpView",
     registryValueType: "REG_DWORD",
     registryValueData: "1",
-  };
-  getReg(caArgs)
+  });
+
+  ipcRenderer.on("message-from-main", (event, message) => {
+    log(message);
+  });
+});
+
+function createCheckableReg(caArgs) {
+  const checkbox = createCheckbox(
+    caArgs?.registryValueName,
+    caArgs?.registryValueName
+  );
+
+  getReg({
+    registryKey: caArgs?.registryKey,
+    registryValueName: caArgs?.registryValueName,
+    registryValueType: caArgs?.registryValueType,
+    registryValueData: caArgs?.registryValueData,
+  })
     .then((result) => {
-      checkbox_jumplists.checked = result;
+      checkbox.checked = result;
     })
     .catch((error) => {
       log(error);
       console.error(error);
     });
 
-  checkbox_jumplists.addEventListener("change", (event) => {
-    const caArgs = {
-      registryKey:
-        "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-      registryValueName: "EnableXamlJumpView",
-      registryValueType: "REG_DWORD",
-      registryValueData: "1",
+  checkbox.addEventListener("change", (event) => {
+    setReg({
+      registryKey: caArgs?.registryKey,
+      registryValueName: caArgs?.registryValueName,
+      registryValueType: caArgs?.registryValueType,
+      registryValueData: caArgs?.registryValueData,
       state: event.target.checked,
-    };
-    setReg(caArgs);
+    });
   });
-  ipcRenderer.on("message-from-main", (event, message) => {
-    log(message);
-  });
-});
+}
 
 function createCheckbox(name, label) {
   const checkbox = document.createElement("input");

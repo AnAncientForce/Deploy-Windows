@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, Menu } = require("electron");
+const { app, BrowserWindow, ipcMain, Menu, dialog } = require("electron");
 const { exec } = require("child_process");
 const { spawn } = require("child_process");
 const path = require("path");
 const os = require("os");
 const helper = require("../modules/helper.js");
+const fs = require("fs");
 
 let mainWindow;
 
@@ -87,6 +88,18 @@ ipcMain.on("verbose-logging", (event, enableLogging) => {
       return;
     }
     console.log(`Command executed: ${commandToExecute}`);
+  });
+});
+
+ipcMain.on("chooseFile", (event, arg) => {
+  const result = dialog.showOpenDialog({
+    properties: ["openFile"],
+    filters: [{ name: "Images", extensions: ["png", "jpg", "jpeg"] }],
+  });
+
+  result.then(({ canceled, filePaths, bookmarks }) => {
+    const base64 = fs.readFileSync(filePaths[0]).toString("base64");
+    event.reply("chosenFile", filePaths[0]);
   });
 });
 
