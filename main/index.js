@@ -612,7 +612,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Disable Location Services",
+    prompt: "Location Access",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
     registryValueName: "Value",
@@ -622,7 +622,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Disable Microphone Access",
+    prompt: "Microphone Access",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone",
     registryValueName: "Value",
@@ -708,13 +708,8 @@ function getReg(caArgs) {
           resolve(true);
         }
         if (stdout.includes("REG_SZ") && stdout.includes("Allow")) {
-          log("Temp location true ");
           resolve(true);
-        } else if (stdout.includes("REG_SZ") && stdout.includes("Deny")) {
-          log("Temp location false ");
-          resolve(false);
         }
-
         // non matched, so resolve false
         resolve(false);
       }
