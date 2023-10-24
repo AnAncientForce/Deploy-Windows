@@ -612,12 +612,13 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Disable Notification Center",
-    registryKey: "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows",
-    registryValueName: "DisableNotificationCenter",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
+    prompt: "Location Services",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
+    registryValueName: "Value",
+    registryValueType: "REG_SZ",
+    registryValueData: "Deny",
+    OriginalValue: "Allow",
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {
@@ -690,12 +691,21 @@ function getReg(caArgs) {
         console.log("stdout:", stdout);
         console.log("stderr:", stderr);
 
+        console.log("LOG:", stdout);
+
         if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
           // 0x1 = true, 0x0 = false
           resolve(true);
-        } else {
-          resolve(false);
         }
+        if (
+          stdout.includes("REG_SZ") &&
+          (stdout.includes("Allow") || stdout.includes("Deny"))
+        ) {
+          resolve(true);
+        }
+
+        // non matched, so resolve false
+        resolve(false);
       }
     });
   });
