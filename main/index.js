@@ -749,10 +749,14 @@ function setReg(caArgs) {
       return;
     }
 
-    if (!caArgs.state) {
-      // ~~if state is false, set value to 0 = 0x0 = false~~
-      // if state if false, set to original value
-      caArgs.registryValueData = caArgs.OriginalValue;
+    if (caArgs.registryValueType == "REG_SZ") {
+    }
+    if (caArgs.registryValueType == "REG_DWORD") {
+      if (!caArgs.state) {
+        // ~~if state is false, set value to 0 = 0x0 = false~~
+        // if state if false, set to original value
+        caArgs.registryValueData = caArgs.OriginalValue;
+      }
     }
 
     const commandToExecute = caArgs.state
