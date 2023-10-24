@@ -569,6 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
   */
 
   createCheckableReg({
+    prompt: "Toggle Verbose Status",
     registryKey:
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
     registryValueName: "VerboseStatus",
@@ -577,6 +578,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
+    prompt: "Toggle Jump Lists",
     registryKey:
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
     registryValueName: "EnableXamlJumpView",
@@ -585,6 +587,16 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
+    prompt: "Toggle Dark Mode (HKEY_LOCAL_MACHINE)",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+    registryValueName: "AppsUseLightTheme",
+    registryValueType: "REG_DWORD",
+    registryValueData: "0",
+  });
+
+  createCheckableReg({
+    prompt: "Toggle Dark Mode (HKEY_CURRENT_USER)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
@@ -598,10 +610,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function createCheckableReg(caArgs) {
-  const checkbox = createCheckbox(
-    caArgs?.registryValueName,
-    caArgs?.registryValueName
-  );
+  const checkbox = createCheckbox(caArgs?.prompt, caArgs?.prompt);
 
   getReg({
     registryKey: caArgs?.registryKey,
@@ -664,6 +673,7 @@ function getReg(caArgs) {
         console.log("stderr:", stderr);
 
         if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
+          // 0x1 = true, 0x0 = false
           resolve(true);
         } else {
           resolve(false);
