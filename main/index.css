@@ -75,24 +75,19 @@ body {
 }
 
 #left-nav {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0; /* Set bottom to 0 to touch the bottom of the page */
+  float: left 0;
+  height: 100vh;
   width: 20%;
   background-color: rgba(255, 255, 255, 0.5);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
 }
 
 #section-content {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0; /* Set bottom to 0 to touch the bottom of the page */
+  float:right 0;
+  height: 100vh;
   width: 80%;
   background-color: rgba(255, 255, 255, 0.25);
 }
-
 
 
 /* --------------------------------------------------- */

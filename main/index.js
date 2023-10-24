@@ -586,7 +586,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   createCheckableReg({
     registryKey:
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes",
+      "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
     registryValueData: "0",
