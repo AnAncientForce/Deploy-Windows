@@ -605,9 +605,6 @@ function setReg(caArgs) {
   if (!caArgs?.registryValueData) {
     return;
   }
-  if (!caArgs?.state) {
-    return;
-  }
   const enable_command = `reg add "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /t ${caArgs?.registryValueType} /d ${caArgs?.registryValueData} /f`;
   const disable_command = `reg delete "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /f`;
   const commandToExecute = caArgs?.state ? enable_command : disable_command;
