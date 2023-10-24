@@ -587,21 +587,21 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Toggle Dark Mode (System)",
+    prompt: "Toggle Light Mode (System)",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
-    registryValueData: "0",
+    registryValueData: "1",
   });
 
   createCheckableReg({
-    prompt: "Toggle Dark Mode (User)",
+    prompt: "Toggle Light Mode (User)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
     registryValueType: "REG_DWORD",
-    registryValueData: "0",
+    registryValueData: "1",
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {
@@ -683,37 +683,6 @@ function getReg(caArgs) {
   });
 }
 
-function createRegistryPath(registryPath, callback) {
-  // Split the registry path into individual keys
-  const registryKeys = registryPath.split("\\");
-
-  // Start with the root key
-  let currentKey = registryKeys.shift();
-
-  // Recursive function to create the keys
-  function createKey() {
-    if (registryKeys.length === 0) {
-      // All keys have been created, call the callback function
-      callback();
-    } else {
-      // Create the current key and move on to the next one
-      const createKeyCommand = `reg add "${currentKey}" /f`;
-      exec(createKeyCommand, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error creating registry key ${currentKey}: ${error}`);
-          return;
-        }
-        // Move to the next key
-        currentKey = `${currentKey}\\${registryKeys.shift()}`;
-        createKey();
-      });
-    }
-  }
-
-  // Start creating the keys
-  createKey();
-}
-
 function setReg(caArgs) {
   if (
     !caArgs?.registryKey ||
@@ -721,42 +690,19 @@ function setReg(caArgs) {
     !caArgs?.registryValueType ||
     !caArgs?.registryValueData
   ) {
+    log("Incomplete arguments for modifying the registry.");
     console.error("Incomplete arguments for modifying the registry.");
     return;
   }
+  const commandToExecute = caArgs.state
+    ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
+    : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
 
-  // Check if the registry path exists, and create it if not
-  const checkKeyCommand = `reg query "${caArgs.registryKey}"`;
-  exec(checkKeyCommand, (error, stdout, stderr) => {
+  exec(commandToExecute, (error, stdout, stderr) => {
     if (error) {
-      // Registry path doesn't exist, create it
-      createRegistryPath(caArgs.registryKey, () => {
-        // Now that the path is created, proceed to add or delete the key
-        const commandToExecute = caArgs.state
-          ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
-          : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
-
-        exec(commandToExecute, (error, stdout, stderr) => {
-          if (error) {
-            console.error(`Error: ${error}`);
-            return;
-          }
-          console.log(`Command executed: ${commandToExecute}`);
-        });
-      });
-    } else {
-      // The registry path already exists, proceed to add or delete the key
-      const commandToExecute = caArgs.state
-        ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
-        : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
-
-      exec(commandToExecute, (error, stdout, stderr) => {
-        if (error) {
-          console.error(`Error: ${error}`);
-          return;
-        }
-        console.log(`Command executed: ${commandToExecute}`);
-      });
+      console.error(`Error: ${error}`);
+      return;
     }
+    console.log(`Command executed: ${commandToExecute}`);
   });
 }
