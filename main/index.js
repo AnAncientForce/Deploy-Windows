@@ -20,6 +20,9 @@ var current_selected_menu_item;
 var powershell;
 var checkboxContainer1;
 var checkboxContainer2;
+
+var initializing_values = false;
+
 function saveBoolean(key, value) {
   booleanStorage[key] = value;
 }
@@ -694,6 +697,12 @@ function setReg(caArgs) {
     console.error("Incomplete arguments for modifying the registry.");
     return;
   }
+  if (initializing_values) {
+    log("Main Interface is busy. Try again later.");
+    return;
+  } else {
+    initializing_values = true;
+  }
   const commandToExecute = caArgs.state
     ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
     : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
@@ -701,8 +710,10 @@ function setReg(caArgs) {
   exec(commandToExecute, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error: ${error}`);
+      initializing_values = false;
       return;
     }
+    initializing_values = false;
     console.log(`Command executed: ${commandToExecute}`);
   });
 }
