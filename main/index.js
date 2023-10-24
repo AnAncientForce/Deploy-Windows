@@ -612,10 +612,9 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "People",
-    registryKey:
-      "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\\People",
-    registryValueName: "PeopleBand",
+    prompt: "Disable Notification Center",
+    registryKey: "HKEY_CURRENT_USER\\Software\\Policies\\Microsoft\\Windows",
+    registryValueName: "DisableNotificationCenter",
     registryValueType: "REG_DWORD",
     registryValueData: "0",
     OriginalValue: "1",
