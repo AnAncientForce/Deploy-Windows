@@ -562,6 +562,14 @@ document.addEventListener("DOMContentLoaded", () => {
     registryValueData: "1",
   });
 
+  createCheckableReg({
+    registryKey:
+      "HKLM\\SOFTWARE\\Microsoft\\System\\ControlSet001\\Control\\GraphicsDrivers",
+    registryValueName: "HwSchMode",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
+  });
+
   ipcRenderer.on("message-from-main", (event, message) => {
     log(message);
   });
