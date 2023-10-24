@@ -567,7 +567,7 @@ function createCheckbox(name, label) {
 }
 function getReg(caArgs) {
   return new Promise((resolve, reject) => {
-    if (!caArgs?.registryKey || !caArgs?.registryValueName) {
+    if (!caArgs?.registryKey && !caArgs?.registryValueName) {
       reject(new Error("Invalid parameters"));
       return;
     }
