@@ -621,6 +621,16 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "Allow",
   });
 
+  createCheckableReg({
+    prompt: "Disable Microphone Access",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone",
+    registryValueName: "Value",
+    registryValueType: "REG_SZ",
+    registryValueData: "Deny",
+    OriginalValue: "Allow",
+  });
+
   ipcRenderer.on("message-from-main", (event, message) => {
     log(message);
   });
