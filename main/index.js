@@ -612,7 +612,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Location Services",
+    prompt: "Disable Location Services",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
     registryValueName: "Value",
