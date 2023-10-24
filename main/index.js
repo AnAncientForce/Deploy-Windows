@@ -750,6 +750,9 @@ function setReg(caArgs) {
     }
 
     if (caArgs.registryValueType == "REG_SZ") {
+      if (caArgs.state) {
+        caArgs.registryValueData = caArgs.OriginalValue;
+      }
     }
     if (caArgs.registryValueType == "REG_DWORD") {
       if (!caArgs.state) {
