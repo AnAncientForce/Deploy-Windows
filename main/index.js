@@ -722,7 +722,7 @@ function setReg(caArgs) {
     !caArgs?.registryKey ||
     !caArgs?.registryValueName ||
     !caArgs?.registryValueType ||
-    !caArgs?.registryValueType ||
+    !caArgs?.registryValueData ||
     !caArgs?.OriginalValue
   ) {
     log("Incomplete arguments for modifying the registry.");
