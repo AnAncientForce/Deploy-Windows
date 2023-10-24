@@ -1,11 +1,11 @@
-const { ipcRenderer, dialog } = require("electron");
+const { ipcRenderer } = require("electron");
 const { shell } = require("electron");
 const { exec } = require("child_process");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-// const dialog = require("../modules/dialog.js");
 const helper = require("../modules/helper.js");
+const zRegistry = require("../modules/registry.js");
 
 var actionIndexer = 0;
 var booleanStorage = {};
@@ -571,7 +571,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ipcRenderer.send("invoke-reg-values");
   */
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Verbose Status",
     registryKey:
       "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
@@ -581,7 +581,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "0",
   });
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Jump Lists",
     registryKey:
       "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
@@ -591,7 +591,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "0",
   });
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Light Mode (System)",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -601,7 +601,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "0",
   });
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Light Mode (User)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -611,7 +611,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "0",
   });
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Location Access",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
@@ -621,7 +621,7 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "Allow",
   });
 
-  createCheckableReg({
+  zRegistry.createCheckableReg({
     prompt: "Microphone Access",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone",
@@ -635,145 +635,3 @@ document.addEventListener("DOMContentLoaded", () => {
     log(message);
   });
 });
-
-function createCheckableReg(caArgs) {
-  const checkbox = createCheckbox(caArgs?.prompt, caArgs?.prompt);
-
-  getReg({
-    registryKey: caArgs?.registryKey,
-    registryValueName: caArgs?.registryValueName,
-    registryValueType: caArgs?.registryValueType,
-    registryValueData: caArgs?.registryValueData,
-    OriginalValue: caArgs?.OriginalValue,
-  })
-    .then((result) => {
-      checkbox.checked = result;
-    })
-    .catch((error) => {
-      log(error);
-      console.error(error);
-    });
-
-  checkbox.addEventListener("change", (event) => {
-    setReg({
-      registryKey: caArgs?.registryKey,
-      registryValueName: caArgs?.registryValueName,
-      registryValueType: caArgs?.registryValueType,
-      registryValueData: caArgs?.registryValueData,
-      OriginalValue: caArgs?.OriginalValue,
-      state: event.target.checked,
-    });
-  });
-}
-
-function createCheckbox(name, label) {
-  const checkbox = document.createElement("input");
-  checkbox.type = "checkbox";
-  checkbox.id = name;
-  checkbox.name = name;
-
-  const labelElement = document.createElement("label");
-  labelElement.setAttribute("for", name);
-  labelElement.textContent = label;
-
-  const container = document.createElement("div");
-
-  container.appendChild(checkbox);
-  container.appendChild(labelElement);
-  container.classList.add("checkbox-label");
-  checkboxContainer1.appendChild(container);
-  return checkbox;
-}
-function getReg(caArgs) {
-  return new Promise((resolve, reject) => {
-    if (!caArgs?.registryKey || !caArgs?.registryValueName) {
-      reject(new Error("Invalid parameters"));
-      return;
-    }
-
-    const query_command = `reg query "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}"`;
-
-    exec(query_command, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error when querying the registry: ${error}`);
-        reject(error);
-      } else {
-        console.log("stdout:", stdout);
-        console.log("stderr:", stderr);
-
-        console.log("LOG:", stdout);
-
-        if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
-          // 0x1 = true, 0x0 = false
-          resolve(true);
-        }
-        if (stdout.includes("REG_SZ") && stdout.includes("Allow")) {
-          resolve(true);
-        }
-        // non matched, so resolve false
-        resolve(false);
-      }
-    });
-  });
-}
-
-function setReg(caArgs) {
-  if (
-    !caArgs?.registryKey ||
-    !caArgs?.registryValueName ||
-    !caArgs?.registryValueType ||
-    !caArgs?.registryValueData ||
-    !caArgs?.OriginalValue
-  ) {
-    log("Incomplete arguments for modifying the registry.");
-    console.error("Incomplete arguments for modifying the registry.");
-    return;
-  }
-  if (initializing_values) {
-    log("Main Interface is busy. Try again later.");
-    return;
-  } else {
-    initializing_values = true;
-  }
-  /*
-  const commandToExecute = caArgs.state
-    ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
-    : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
-  */
-
-  exec(`reg query "${caArgs.registryKey}"`, (error, stdout, stderr) => {
-    if (error) {
-      // Registry key doesn't exist, throw an error
-      console.error(`Error: The specified registry key doesn't exist.`);
-      initializing_values = false;
-      return;
-    }
-
-    if (caArgs.registryValueType == "REG_SZ") {
-      if (caArgs.state) {
-        caArgs.registryValueData = caArgs.OriginalValue;
-      }
-    }
-    if (caArgs.registryValueType == "REG_DWORD") {
-      if (!caArgs.state) {
-        // ~~if state is false, set value to 0 = 0x0 = false~~
-        // if state if false, set to original value
-        caArgs.registryValueData = caArgs.OriginalValue;
-      }
-    }
-
-    const commandToExecute = caArgs.state
-      ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
-      : `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`;
-
-    exec(commandToExecute, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`Error: ${error}`);
-        initializing_values = false;
-        return;
-      }
-      initializing_values = false;
-      console.log(`Command executed: ${commandToExecute}`);
-    });
-  });
-}

@@ -1,6 +1,7 @@
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
+const { create } = require("domain");
 
 var jSettings = null;
 try {
@@ -64,6 +65,25 @@ function executeCommand(command) {
   });
 }
 
+function createCheckbox(name, label) {
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.id = name;
+  checkbox.name = name;
+
+  const labelElement = document.createElement("label");
+  labelElement.setAttribute("for", name);
+  labelElement.textContent = label;
+
+  const container = document.createElement("div");
+
+  container.appendChild(checkbox);
+  container.appendChild(labelElement);
+  container.classList.add("checkbox-label");
+  checkboxContainer1.appendChild(container);
+  return checkbox;
+}
+
 module.exports = {
   readJSONValue: readJSONValue,
   getSettings: getSettings,
@@ -71,4 +91,5 @@ module.exports = {
   isUsingLinux: isUsingLinux,
   shuffleArray: shuffleArray,
   executeCommand: executeCommand,
+  createCheckbox: createCheckbox,
 };
