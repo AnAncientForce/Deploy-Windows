@@ -587,7 +587,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Toggle Dark Mode (HKEY_LOCAL_MACHINE)",
+    prompt: "Toggle Dark Mode (System)",
     registryKey:
       "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
@@ -596,7 +596,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   createCheckableReg({
-    prompt: "Toggle Dark Mode (HKEY_CURRENT_USER)",
+    prompt: "Toggle Dark Mode (User)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
     registryValueName: "AppsUseLightTheme",
@@ -657,7 +657,7 @@ function createCheckbox(name, label) {
 }
 function getReg(caArgs) {
   return new Promise((resolve, reject) => {
-    if (!caArgs?.registryKey && !caArgs?.registryValueName) {
+    if (!caArgs?.registryKey || !caArgs?.registryValueName) {
       reject(new Error("Invalid parameters"));
       return;
     }
@@ -684,21 +684,19 @@ function getReg(caArgs) {
 }
 
 function setReg(caArgs) {
-  if (!caArgs?.registryKey) {
+  if (
+    !caArgs?.registryKey ||
+    !caArgs?.registryValueName ||
+    !caArgs?.registryValueType ||
+    !caArgs?.registryValueData
+  ) {
+    log("Incomplete arguments for modifying the registry.");
+    console.error("Incomplete arguments for modifying the registry.");
     return;
   }
-  if (!caArgs?.registryValueName) {
-    return;
-  }
-  if (!caArgs?.registryValueType) {
-    return;
-  }
-  if (!caArgs?.registryValueData) {
-    return;
-  }
-  const enable_command = `reg add "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /t ${caArgs?.registryValueType} /d ${caArgs?.registryValueData} /f`;
-  const disable_command = `reg delete "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}" /f`;
-  const commandToExecute = caArgs?.state ? enable_command : disable_command;
+  const commandToExecute = caArgs.state
+    ? `reg add "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /t ${caArgs.registryValueType} /d ${caArgs.registryValueData} /f`
+    : `reg delete "${caArgs.registryKey}" /v "${caArgs.registryValueName}" /f`;
 
   exec(commandToExecute, (error, stdout, stderr) => {
     if (error) {
