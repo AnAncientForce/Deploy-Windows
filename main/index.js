@@ -490,9 +490,15 @@ document.addEventListener("DOMContentLoaded", () => {
     registryValueType: "REG_DWORD",
     registryValueData: "1",
   };
-  verboseLoggingCheckbox.checked = getReg(caArgs);
-  log("GET REG:");
-  log(getReg(caArgs));
+
+  getReg(caArgs)
+    .then((result) => {
+      verboseLoggingCheckbox.checked = result;
+    })
+    .catch((error) => {
+      log(error);
+      console.error(error);
+    });
 
   verboseLoggingCheckbox.addEventListener("change", (event) => {
     caArgs = {
@@ -517,9 +523,14 @@ document.addEventListener("DOMContentLoaded", () => {
     registryValueType: "REG_DWORD",
     registryValueData: "1",
   };
-  checkbox_jumplists.checked = getReg(caArgs);
-  log("GET REG:");
-  log(getReg(caArgs));
+  getReg(caArgs)
+    .then((result) => {
+      checkbox_jumplists.checked = result;
+    })
+    .catch((error) => {
+      log(error);
+      console.error(error);
+    });
 
   checkbox_jumplists.addEventListener("change", (event) => {
     const caArgs = {
@@ -554,44 +565,30 @@ function createCheckbox(name, label) {
   checkboxContainer.appendChild(container);
   return checkbox;
 }
-
 function getReg(caArgs) {
-  if (!caArgs?.registryKey) {
-    return;
-  }
-  if (!caArgs?.registryValueName) {
-    return;
-  }
-  if (!caArgs?.registryValueType) {
-    return;
-  }
-  if (!caArgs?.registryValueData) {
-    return;
-  }
-  const query_command = `reg query "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}"`;
-  exec(query_command, (error, stdout, stderr) => {
-    if (error) {
-      console.error(`Error when querying the registry: ${error}`);
-      log(`Error when querying the registry: ${error}`);
-      // Send an error state (false) in case of an error
-      log(`Event: FALSE (because error).`);
-      return false;
-    } else {
-      console.log("stdout:", stdout);
-      console.log("stderr:", stderr);
-
-      if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
-        log(`Event: TRUE`);
-        console.log(`${caArgs?.registryValueName} is enabled in the registry.`);
-        return true;
-      } else {
-        log(`Event: FALSE`);
-        console.log(
-          `${caArgs?.registryValueName} is disabled in the registry.`
-        );
-        return false;
-      }
+  return new Promise((resolve, reject) => {
+    if (!caArgs?.registryKey || !caArgs?.registryValueName) {
+      reject(new Error("Invalid parameters"));
+      return;
     }
+
+    const query_command = `reg query "${caArgs?.registryKey}" /v "${caArgs?.registryValueName}"`;
+
+    exec(query_command, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`Error when querying the registry: ${error}`);
+        reject(error);
+      } else {
+        console.log("stdout:", stdout);
+        console.log("stderr:", stderr);
+
+        if (stdout.includes("REG_DWORD") && stdout.includes("0x1")) {
+          resolve(true);
+        } else {
+          resolve(false);
+        }
+      }
+    });
   });
 }
 
