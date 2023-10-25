@@ -584,8 +584,8 @@ document.addEventListener("DOMContentLoaded", () => {
       "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
     registryValueName: "HiberbootEnabled",
     registryValueType: "REG_DWORD",
-    registryValueData: "0",
-    OriginalValue: "1",
+    registryValueData: "1",
+    OriginalValue: "0",
   });
 
   changeSection({
