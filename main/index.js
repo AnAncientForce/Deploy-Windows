@@ -160,7 +160,7 @@ function changeSection(caArgs) {
   }
 
   document
-    .querySelectorAll(".square-button, #xscale img, #screensaver img")
+    .querySelectorAll(".square-button, .header, h1, textarea")
     .forEach((element) => {
       // element.remove();
       // better resource usage since we aren't dynamically rebuilding elements everytime section is changed
