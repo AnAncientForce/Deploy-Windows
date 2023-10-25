@@ -36,121 +36,11 @@ function log(txt) {
   textarea.scrollTop = textarea.scrollHeight;
 }
 
-function createAction(text, optionalClass, section, action, caArgs) {
-  actionIndexer++;
-  const div = document.createElement("div");
-  div.id = `action${actionIndexer}`;
-  // div.classList.add("toggleable", "singleaction");
-  if (optionalClass.length > 0) {
-    div.classList.add(optionalClass);
-  }
-  // "animated-background"
-
-  if (!caArgs?.useImg) {
-    div.textContent = text;
-  } else {
-    const img = document.createElement("img");
-    img.src = caArgs.imgSrc;
-    img.alt = caArgs.imgAlt || "";
-    img.classList.add("nav-img");
-    div.appendChild(img);
-  }
-
-  if (caArgs?.showTitle) {
-    div.appendChild(document.createTextNode(text));
-  }
-
-  if (caArgs?.highlight) {
-    div.addEventListener("click", function () {
-      current_selected_menu_item = div;
-      current_selected_menu_item.style.background = "purple";
-      // reset others
-      document.querySelectorAll(".perm-btn").forEach((element) => {
-        if (element != current_selected_menu_item) {
-          element.style.background = "linear-gradient(45deg, #82b8ff, #b6e1ff)";
-        }
-      });
-    });
-  }
-
-  if (caArgs?.group) {
-    if (caArgs.group.length > 0) {
-      var groupDiv;
-      if (document.getElementById(caArgs.group)) {
-        // group already exists, add child
-        groupDiv = document.getElementById(caArgs.group);
-        groupDiv.appendChild(div);
-      } else {
-        // create group, attach child
-        groupDiv = document.createElement("div");
-        groupDiv.id = caArgs.group;
-        groupDiv.style.borderColor = "red";
-        groupDiv.style.border = "2px solid white";
-        groupDiv.style.borderRadius = "16px";
-        groupDiv.style.fontWeight = "bold";
-        groupDiv.style.textAlign = "center";
-        groupDiv.appendChild(document.createTextNode(caArgs.group));
-        groupDiv.appendChild(div);
-        document.getElementById(section).appendChild(groupDiv);
-      }
-    }
-  }
-
-  div.onclick = action;
-  if (!caArgs?.group) {
-    // not using group, so append default
-    document.getElementById(section).appendChild(div);
-  }
-
-  // log("Appended", `action${actionIndexer}`, text);
-
-  // Enable flash feedback
-  div.addEventListener("click", function () {
-    console.log("fade feedback");
-    if (checkBoolean("fading")) {
-      return;
-    }
-    saveBoolean("fading", true);
-    const main = document.getElementById("main");
-    main.style.backgroundColor = "skyblue";
-    const transitionEndHandler = () => {
-      main.removeEventListener("transitionend", transitionEndHandler);
-      main.style.backgroundColor = "transparent";
-      saveBoolean("fading", false);
-    };
-    main.addEventListener("transitionend", transitionEndHandler);
-  });
-
-  caArgs = {};
-  return div;
-}
-
 var currentSection = "";
-
-function hideAllExceptCurrent(caArgs) {
-  const sections = document.querySelectorAll("section");
-
-  sections.forEach((section) => {
-    if (section.tagName === "SECTION") {
-      if (caArgs?.hide_all) {
-        section.classList.add("hidden");
-      } else {
-        // default
-        document.getElementById(currentSection).classList.remove("hidden");
-        if (section.id === currentSection) {
-          section.style.display = "block";
-        } else {
-          section.style.display = "none";
-        }
-      }
-    }
-  });
-  caArgs = {};
-}
 
 function changeSection(caArgs) {
   if (!caArgs?.section) {
-    console.error("section is required");
+    console.error("no section passed");
     return;
   }
   if (caArgs?.hideLogger) {
@@ -159,6 +49,7 @@ function changeSection(caArgs) {
     document.getElementById("logger").style.display = "block";
   }
 
+  // re-animate elements upon section change
   document
     .querySelectorAll(".square-button, .header, h1, textarea")
     .forEach((element) => {
@@ -167,17 +58,27 @@ function changeSection(caArgs) {
       element.classList.remove("animate-dropInAnimation");
       element.classList.add("animate-dropInAnimation");
     });
+
   if (caArgs?.section) {
     currentSection = caArgs?.section;
-    hideAllExceptCurrent();
-    if (!caArgs?.hide_nav) {
-      // build_nav();
-    }
+    // hide all sections expect the current section
+    const sections = document.querySelectorAll("section");
+
+    sections.forEach((section) => {
+      if (section.tagName === "SECTION") {
+        document.getElementById(currentSection).classList.remove("hidden");
+        if (section.id === currentSection) {
+          section.style.display = "block";
+        } else {
+          section.style.display = "none";
+        }
+      }
+    });
   }
 }
 
 function page_home() {
-  createAction(
+  helper.createAction(
     "God Mode",
     "square-button",
     "section-home-btns",
@@ -191,7 +92,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "Activate Windows",
     "square-button",
     "section-home-btns",
@@ -205,7 +106,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "Set Lockscreen Wallpaper",
     "square-button",
     "section-home-btns",
@@ -219,7 +120,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "CTT",
     "square-button",
     "section-home-btns",
@@ -233,7 +134,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "Restart Explorer",
     "square-button",
     "section-home-btns",
@@ -247,7 +148,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "Install Packages",
     "square-button",
     "section-home-btns",
@@ -261,7 +162,7 @@ function page_home() {
       imgAlt: "Help",
     }
   );
-  createAction(
+  helper.createAction(
     "Open Addon URLs",
     "square-button",
     "section-home-btns",
@@ -345,12 +246,18 @@ function cmd_res_exp() {
     powershell: true,
   });
 }
-
+var pending_stop = false;
 async function cmd_winget() {
   for (const package of packages) {
     log(`Installing ${package}...`);
     try {
       const { stdout, stderr } = await new Promise((resolve, reject) => {
+        document.getElementById("current-task").style.display = "block";
+        if (pending_stop) {
+          resetValues("stop");
+          log("Stopped.");
+          return;
+        }
         exec(
           `winget install ${package}`,
           { shell: true },
@@ -376,7 +283,15 @@ async function cmd_winget() {
       console.error(`Installation failed for ${package}. Error: ${error}`);
     }
   }
+  resetValues("stop");
   log("All packages have been upgraded / installed");
+}
+
+function resetValues(value) {
+  if (value === "stop") {
+    document.getElementById("current-task").style.display = "none";
+    pending_stop = false;
+  }
 }
 
 function page_settings() {
@@ -384,7 +299,7 @@ function page_settings() {
     section: "section-settings",
   });
   dynamicSettings();
-  createAction(
+  helper.createAction(
     "Change Theme",
     "square-button",
     "section-settings-btns",
@@ -476,16 +391,19 @@ function page_help() {
     files.forEach((file) => {
       file = file.replace(".txt", "");
       console.log(file);
-      createAction(file, "square-button", parent, function () {
+      helper.createAction(file, "square-button", parent, function () {
         loadDoc(file);
       });
     });
   });
 }
 
+function page_registry() {}
+
 function init_pages() {
   page_help();
   page_home();
+  page_registry();
   page_settings();
 }
 
@@ -500,7 +418,7 @@ function loadJson() {
 }
 
 function init_left_nav() {
-  createAction(
+  helper.createAction(
     "Help",
     "perm-btn",
     "left-nav",
@@ -514,7 +432,7 @@ function init_left_nav() {
       highlight: true,
     }
   );
-  createAction(
+  helper.createAction(
     "Operations",
     "perm-btn",
     "left-nav",
@@ -527,7 +445,7 @@ function init_left_nav() {
       highlight: true,
     }
   );
-  createAction(
+  helper.createAction(
     "Settings",
     "perm-btn",
     "left-nav",
@@ -538,6 +456,20 @@ function init_left_nav() {
     },
     {
       highlight: true,
+    }
+  );
+  helper.createAction(
+    "Stop",
+    "square-button",
+    "current-task",
+    function () {
+      pending_stop = true;
+    },
+    {
+      showTitle: true,
+      useImg: true,
+      imgSrc: "../images/stop.png",
+      imgAlt: "Stop",
     }
   );
 }
@@ -616,16 +548,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   zRegistry.createCheckableReg({
-    prompt: "Light Mode (System)",
-    registryKey:
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-    registryValueName: "AppsUseLightTheme",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
-  });
-
-  zRegistry.createCheckableReg({
     prompt: "Light Mode (User)",
     registryKey:
       "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
@@ -653,6 +575,11 @@ document.addEventListener("DOMContentLoaded", () => {
     registryValueType: "REG_SZ",
     registryValueData: "Deny",
     OriginalValue: "Allow",
+  });
+
+  changeSection({
+    section: "section-home",
+    hideLogger: false,
   });
 
   ipcRenderer.on("message-from-main", (event, message) => {

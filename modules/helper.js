@@ -11,6 +11,95 @@ function checkBoolean(key) {
   return booleanStorage[key];
 }
 
+function createAction(text, optionalClass, section, action, caArgs) {
+  actionIndexer++;
+  const div = document.createElement("div");
+  div.id = `action${actionIndexer}`;
+  // div.classList.add("toggleable", "singleaction");
+  if (optionalClass.length > 0) {
+    div.classList.add(optionalClass);
+  }
+  // "animated-background"
+
+  if (!caArgs?.useImg) {
+    div.textContent = text;
+  } else {
+    const img = document.createElement("img");
+    img.src = caArgs.imgSrc;
+    img.alt = caArgs.imgAlt || "";
+    img.classList.add("nav-img");
+    div.appendChild(img);
+  }
+
+  if (caArgs?.showTitle) {
+    div.appendChild(document.createTextNode(text));
+  }
+
+  if (caArgs?.highlight) {
+    div.addEventListener("click", function () {
+      current_selected_menu_item = div;
+      current_selected_menu_item.style.background = "purple";
+      // reset others
+      document.querySelectorAll(".perm-btn").forEach((element) => {
+        if (element != current_selected_menu_item) {
+          element.style.background = "linear-gradient(45deg, #82b8ff, #b6e1ff)";
+        }
+      });
+    });
+  }
+
+  if (caArgs?.group) {
+    if (caArgs.group.length > 0) {
+      var groupDiv;
+      if (document.getElementById(caArgs.group)) {
+        // group already exists, add child
+        groupDiv = document.getElementById(caArgs.group);
+        groupDiv.appendChild(div);
+      } else {
+        // create group, attach child
+        groupDiv = document.createElement("div");
+        groupDiv.id = caArgs.group;
+        groupDiv.style.borderColor = "red";
+        groupDiv.style.border = "2px solid white";
+        groupDiv.style.borderRadius = "16px";
+        groupDiv.style.fontWeight = "bold";
+        groupDiv.style.textAlign = "center";
+        groupDiv.appendChild(document.createTextNode(caArgs.group));
+        groupDiv.appendChild(div);
+        document.getElementById(section).appendChild(groupDiv);
+      }
+    }
+  }
+
+  div.onclick = action;
+  if (!caArgs?.group) {
+    // not using group, so append default
+    document.getElementById(section).appendChild(div);
+  }
+
+  // log("Appended", `action${actionIndexer}`, text);
+
+  // Enable flash feedback
+  div.addEventListener("click", function () {
+    console.log("fade feedback");
+    if (checkBoolean("fading")) {
+      return;
+    }
+    saveBoolean("fading", true);
+    const main = document.getElementById("main");
+    main.style.backgroundColor = "skyblue";
+    const transitionEndHandler = () => {
+      main.removeEventListener("transitionend", transitionEndHandler);
+      main.style.backgroundColor = "transparent";
+      saveBoolean("fading", false);
+    };
+    main.addEventListener("transitionend", transitionEndHandler);
+  });
+
+  caArgs = {};
+  return div;
+}
+
 var jSettings = null;
 try {
   jSettings = path.join(path.dirname(__dirname), "settings.json");
@@ -93,6 +182,9 @@ function createCheckbox(name, label) {
 }
 
 module.exports = {
+  saveBoolean: saveBoolean,
+  checkBoolean: checkBoolean,
+  createAction: createAction,
   readJSONValue: readJSONValue,
   getSettings: getSettings,
   writeSettings: writeSettings,

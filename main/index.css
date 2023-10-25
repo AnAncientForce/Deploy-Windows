@@ -22,12 +22,32 @@ body {
   align-items: center;
 }
 
-#section-home-btns{
-  flex-wrap: wrap; /* Allow items to wrap to the next row */
+
+
+.gridify {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* Start at the left side of the container */
 }
-#section-settings-btns{
-  flex-wrap: wrap; /* Allow items to wrap to the next row */
+
+.gridify > div {
+  width: 15%; /* 4 items per row to ensure equal length */
+  box-sizing: border-box; /* Ensure padding and borders don't affect the width */
 }
+@media (max-width: 1000px) {
+  .gridify > div {
+    width: 33.33%; /* 3 items per row on screens between 768px and 1000px */
+  }
+}
+
+@media (max-width: 768px) {
+  .gridify > div {
+    width: 50%; /* 2 items per row on screens smaller than 768px */
+  }
+}
+
+
+
 .grid-overlay {
   z-index: -1;
   overflow-y: hidden;
@@ -96,6 +116,26 @@ body {
   overflow-y: scroll;
 }
 
+#current-task {
+  background-color: rgba(255, 0, 0, 0.5); 
+  width: 100%;
+  height: fit-content;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: bold;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Horizontally center items */
+  align-items: center; /* Vertically center items */
+}
+#current-task > * {
+  width: fit-content !important;
+  height: fit-content !important;
+}
 
 
 /* --------------------------------------------------- */
