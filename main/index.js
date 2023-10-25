@@ -586,7 +586,6 @@ document.addEventListener("DOMContentLoaded", () => {
   init_left_nav();
   init_pages();
   loadJson();
-  page_home();
 
   /*
   ipcRenderer.on("initial-state", (event, initialState) => {
