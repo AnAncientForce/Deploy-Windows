@@ -12,8 +12,7 @@
       class="image_shower"
       src="../images/LockScreenWallpaper.jpg"
     />
-    <div id="current-task">
-    </div>
+    <div id="current-task"></div>
     <div id="main" class="row">
       <div id="left-nav" class="column"></div>
       <div id="section-content">
@@ -36,15 +35,17 @@
           <h1 style="text-align: center">Main Interface</h1>
           <div id="section-home-btns" class="row gridify"></div>
         </section>
+        <section id="section-registry">
+          <h1 style="text-align: center">Registry</h1>
+          <div class="column">
+            <div id="checkboxContainer1" class="row"></div>
+          </div>
+        </section>
         <section id="section-settings">
           <h1 style="text-align: center">Settings</h1>
           <div id="section-settings-btns" class="row gridify"></div>
           <div class="row" style="flex-wrap: wrap">
-            <div class="column" style="margin: 5%">
-              <p class="header">Registry Values</p>
-              <div id="checkboxContainer1" class="row"></div>
-            </div>
-            <div class="column" style="margin: 5%">
+            <div class="column">
               <p class="header">Application Settings</p>
               <div id="checkboxContainer2" class="row"></div>
             </div>
@@ -53,8 +54,9 @@
         <div class="gap"></div>
         <div class="row">
           <textarea id="logger" readonly></textarea>
+        </div>
+        <div class="gap"></div>
       </div>
-      <div class="gap"></div>
     </div>
   </body>
 </html>

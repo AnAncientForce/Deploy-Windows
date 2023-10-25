@@ -295,9 +295,6 @@ function resetValues(value) {
 }
 
 function page_settings() {
-  changeSection({
-    section: "section-settings",
-  });
   dynamicSettings();
   helper.createAction(
     "Change Theme",
@@ -316,7 +313,7 @@ function page_settings() {
     {
       showTitle: true,
       useImg: true,
-      imgSrc: "../images/autostart.png",
+      imgSrc: "../images/colour.png",
       imgAlt: "Help",
     }
   );
@@ -398,7 +395,67 @@ function page_help() {
   });
 }
 
-function page_registry() {}
+function page_registry() {
+  zRegistry.createCheckableReg({
+    prompt: "Verbose Status",
+    registryKey:
+      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
+    registryValueName: "VerboseStatus",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
+    OriginalValue: "0",
+  });
+
+  zRegistry.createCheckableReg({
+    prompt: "Jump Lists",
+    registryKey:
+      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+    registryValueName: "Start_TrackDocs",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
+    OriginalValue: "0",
+  });
+
+  zRegistry.createCheckableReg({
+    prompt: "Light Mode (User)",
+    registryKey:
+      "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+    registryValueName: "AppsUseLightTheme",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
+    OriginalValue: "0",
+  });
+
+  zRegistry.createCheckableReg({
+    prompt: "Location Access",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
+    registryValueName: "Value",
+    registryValueType: "REG_SZ",
+    registryValueData: "Deny",
+    OriginalValue: "Allow",
+  });
+
+  zRegistry.createCheckableReg({
+    prompt: "Microphone Access",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone",
+    registryValueName: "Value",
+    registryValueType: "REG_SZ",
+    registryValueData: "Deny",
+    OriginalValue: "Allow",
+  });
+
+  zRegistry.createCheckableReg({
+    prompt: "Fast Startup",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+    registryValueName: "HiberbootEnabled",
+    registryValueType: "REG_DWORD",
+    registryValueData: "1",
+    OriginalValue: "0",
+  });
+}
 
 function init_pages() {
   page_help();
@@ -439,6 +496,19 @@ function init_left_nav() {
     function () {
       changeSection({
         section: "section-home",
+      });
+    },
+    {
+      highlight: true,
+    }
+  );
+  helper.createAction(
+    "Registry",
+    "perm-btn",
+    "left-nav",
+    function () {
+      changeSection({
+        section: "section-registry",
       });
     },
     {
@@ -527,66 +597,6 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   ipcRenderer.send("invoke-reg-values");
   */
-
-  zRegistry.createCheckableReg({
-    prompt: "Verbose Status",
-    registryKey:
-      "HKLM\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Policies\\System",
-    registryValueName: "VerboseStatus",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
-  });
-
-  zRegistry.createCheckableReg({
-    prompt: "Jump Lists",
-    registryKey:
-      "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
-    registryValueName: "Start_TrackDocs",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
-  });
-
-  zRegistry.createCheckableReg({
-    prompt: "Light Mode (User)",
-    registryKey:
-      "HKEY_CURRENT_USER\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
-    registryValueName: "AppsUseLightTheme",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
-  });
-
-  zRegistry.createCheckableReg({
-    prompt: "Location Access",
-    registryKey:
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\location",
-    registryValueName: "Value",
-    registryValueType: "REG_SZ",
-    registryValueData: "Deny",
-    OriginalValue: "Allow",
-  });
-
-  zRegistry.createCheckableReg({
-    prompt: "Microphone Access",
-    registryKey:
-      "HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\microphone",
-    registryValueName: "Value",
-    registryValueType: "REG_SZ",
-    registryValueData: "Deny",
-    OriginalValue: "Allow",
-  });
-
-  zRegistry.createCheckableReg({
-    prompt: "Fast Startup",
-    registryKey:
-      "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
-    registryValueName: "HiberbootEnabled",
-    registryValueType: "REG_DWORD",
-    registryValueData: "1",
-    OriginalValue: "0",
-  });
 
   changeSection({
     section: "section-home",

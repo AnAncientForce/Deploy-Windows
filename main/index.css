@@ -27,7 +27,7 @@ body {
 .gridify {
   display: flex;
   flex-wrap: wrap;
-  justify-content: flex-start; /* Start at the left side of the container */
+  justify-content: center;
 }
 
 .gridify > div {
