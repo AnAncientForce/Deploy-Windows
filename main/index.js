@@ -514,6 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
   checkboxContainer1 = document.getElementById("checkboxContainer1");
   checkboxContainer2 = document.getElementById("checkboxContainer2");
   validateMissingKeys();
+  resetValues("stop");
   load_themes();
   init_left_nav();
   init_pages();
