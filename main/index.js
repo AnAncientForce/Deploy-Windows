@@ -148,21 +148,35 @@ function hideAllExceptCurrent(caArgs) {
   caArgs = {};
 }
 
-function changeSection(newSection, caArgs) {
+function changeSection(caArgs) {
+  if (!caArgs?.section) {
+    console.error("section is required");
+    return;
+  }
+  if (caArgs?.hideLogger) {
+    document.getElementById("logger").style.display = "none";
+  } else {
+    document.getElementById("logger").style.display = "block";
+  }
+
   document
     .querySelectorAll(".square-button, #xscale img, #screensaver img")
     .forEach((element) => {
-      element.remove();
+      // element.remove();
+      // better resource usage since we aren't dynamically rebuilding elements everytime section is changed
+      element.classList.remove("animate-dropInAnimation");
+      element.classList.add("animate-dropInAnimation");
     });
-  currentSection = newSection;
-  hideAllExceptCurrent();
-  if (!caArgs?.hide_nav) {
-    // build_nav();
+  if (caArgs?.section) {
+    currentSection = caArgs?.section;
+    hideAllExceptCurrent();
+    if (!caArgs?.hide_nav) {
+      // build_nav();
+    }
   }
 }
 
 function page_home() {
-  changeSection("section-home");
   createAction(
     "God Mode",
     "square-button",
@@ -288,10 +302,9 @@ function cmd_set_lock_bg() {
 }
 
 function cmd_god_mode() {
-  caArgs = {
+  quick_exec({
     command: `explorer.exe shell:::{ED7BA470-8E54-465E-825C-99712043E01C}`,
-  };
-  quick_exec(caArgs);
+  });
 }
 
 function quick_exec(caArgs) {
@@ -313,27 +326,24 @@ function quick_exec(caArgs) {
   });
 }
 
-function cmd_ctt(caArgs) {
-  caArgs = {
+function cmd_ctt() {
+  quick_exec({
     command: `-ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://christitus.com/win | iex'`,
     powershell: true,
-  };
-  quick_exec(caArgs);
+  });
 }
 function cmd_activate_windows() {
-  caArgs = {
+  quick_exec({
     command: `-ExecutionPolicy Bypass -Command "Start-Process powershell.exe -verb runas -ArgumentList 'irm https://massgrave.dev/get | iex'`,
     powershell: true,
-  };
-  quick_exec(caArgs);
+  });
 }
 
 function cmd_res_exp() {
-  caArgs = {
+  quick_exec({
     command: `Stop-Process -Name explorer -Force; Start-Process explorer`,
     powershell: true,
-  };
-  quick_exec(caArgs);
+  });
 }
 
 async function cmd_winget() {
@@ -370,7 +380,9 @@ async function cmd_winget() {
 }
 
 function page_settings() {
-  changeSection("section-settings");
+  changeSection({
+    section: "section-settings",
+  });
   dynamicSettings();
   createAction(
     "Change Theme",
@@ -454,7 +466,6 @@ function loadDoc(doc) {
 }
 
 function page_help() {
-  changeSection("section-help");
   const parent = "section-help-btns";
   console.log("reading path:", path.join(__dirname, "../docs/"));
   fs.readdir(path.join(__dirname, "../docs/"), (err, files) => {
@@ -470,6 +481,12 @@ function page_help() {
       });
     });
   });
+}
+
+function init_pages() {
+  page_help();
+  page_home();
+  page_settings();
 }
 
 function loadJson() {
@@ -488,7 +505,10 @@ function init_left_nav() {
     "perm-btn",
     "left-nav",
     function () {
-      page_help();
+      changeSection({
+        section: "section-help",
+        hideLogger: true,
+      });
     },
     {
       highlight: true,
@@ -499,7 +519,9 @@ function init_left_nav() {
     "perm-btn",
     "left-nav",
     function () {
-      page_home();
+      changeSection({
+        section: "section-home",
+      });
     },
     {
       highlight: true,
@@ -510,7 +532,9 @@ function init_left_nav() {
     "perm-btn",
     "left-nav",
     function () {
-      page_settings();
+      changeSection({
+        section: "section-settings",
+      });
     },
     {
       highlight: true,
@@ -560,6 +584,7 @@ document.addEventListener("DOMContentLoaded", () => {
   validateMissingKeys();
   load_themes();
   init_left_nav();
+  init_pages();
   loadJson();
   page_home();
 

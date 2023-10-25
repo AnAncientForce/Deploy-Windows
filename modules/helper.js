@@ -1,7 +1,15 @@
 const os = require("os");
 const fs = require("fs");
 const path = require("path");
-const { create } = require("domain");
+
+var booleanStorage = {};
+
+function saveBoolean(key, value) {
+  booleanStorage[key] = value;
+}
+function checkBoolean(key) {
+  return booleanStorage[key];
+}
 
 var jSettings = null;
 try {
