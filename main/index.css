@@ -129,8 +129,8 @@ body {
   z-index: 5;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Horizontally center items */
-  align-items: center; /* Vertically center items */
+  justify-content: center;
+  align-items: center;
 }
 #current-task > * {
   width: fit-content !important;

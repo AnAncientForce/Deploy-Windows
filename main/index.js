@@ -578,6 +578,16 @@ document.addEventListener("DOMContentLoaded", () => {
     OriginalValue: "Allow",
   });
 
+  zRegistry.createCheckableReg({
+    prompt: "Fast Startup",
+    registryKey:
+      "HKEY_LOCAL_MACHINE\\SYSTEM\\CurrentControlSet\\Control\\Session Manager\\Power",
+    registryValueName: "HiberbootEnabled",
+    registryValueType: "REG_DWORD",
+    registryValueData: "0",
+    OriginalValue: "1",
+  });
+
   changeSection({
     section: "section-home",
     hideLogger: false,
